@@ -1,0 +1,2070 @@
+﻿<Window x:Class="PMA_Project.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="PMA" Height="850" Width="1300" FontSize="12"
+        xmlns:led="clr-namespace:LedDigital;assembly=LedDigital"
+        Background="AliceBlue"
+        xmlns:cvt="clr-namespace:PMA_Project.Other"
+        WindowStartupLocation="CenterScreen"
+        MinHeight="850" MinWidth="1300"        
+        Closed="Window_Closed"        
+        Icon=".\Images\icon.jpg"
+        ResizeMode="NoResize"
+        >
+    <Window.Resources>
+        <cvt:RadioButton_ZeroAsFalseConverter x:Key="ZeroAsFalseConverter"/>
+        <cvt:RadioButton_ZeroAsTrueConverter x:Key="ZeroAsTrueConverter"/>
+        <cvt:RadioButton_CC_IsoResStateConverter x:Key="IsoResStateConverter"/>
+        <cvt:DV_CAN_RlyCtrlAllowConverter x:Key="RlyCtrlAllowConverter"/>
+        <cvt:unit_mvToV_Converter x:Key="unit_mvToV"/>
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="3,0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="TextAlignment" Value="Right"/>
+        </Style>
+        <Style TargetType="GroupBox">
+            <Setter Property="Padding" Value="2" />
+            <Setter Property="Margin" Value="1"/>
+        </Style>
+        <Style TargetType="{x:Type RadioButton}">
+            <Setter Property="Background" Value="Transparent"></Setter>
+            <Setter Property="IsEnabled" Value="False"/>
+            <Setter Property="Padding" Value="0"></Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                        <Grid x:Name="grid" Margin="{TemplateBinding Padding}" VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Margin="3,0,5,0" x:Name="icon" Width="16" Height="16" Source="/PMA_Project;component/images/circle_grey.png" />
+                                <ContentPresenter VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+                        <!--触发器：设置选中状态符号-->
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="true">
+                                <Setter Property="Source" TargetName="icon"  Value="/PMA_Project;component/images/circle_green.png"/>
+                                <Setter Property="Foreground" Value="Green"></Setter>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Foreground" Value="#007800"></Setter>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <!--<Setter Property="Opacity" Value="0.3" TargetName="grid" ></Setter>-->
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid Margin="3">
+        <Grid.RowDefinitions >
+            <RowDefinition  Height="*"/>
+            <RowDefinition Height="90"/>
+        </Grid.RowDefinitions>
+        <StackPanel x:Name="BMSSts" Background="Transparent" VerticalAlignment="Top" HorizontalAlignment="Right" Orientation="Horizontal" Panel.ZIndex="1">
+            <TextBlock Text="BMS通信状态："/>
+            <TextBlock Text="{Binding ValDesc}" Width="40" FontSize="14"  Foreground="Orange"/>
+
+
+        </StackPanel>
+        <TabControl Grid.Row="0" Grid.Column="0" BorderThickness="1" >
+            <TabItem Header="监控01">
+                <Grid >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition />
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="1.3*"/>
+                        </Grid.ColumnDefinitions>
+                        <GroupBox Header="电池状态信息1">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2.2*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                </Grid.ColumnDefinitions>
+                                <GroupBox Header="Lin通信" >
+                                    <StackPanel Orientation="Horizontal" x:Name="CC_Ve_Lin_State">
+                                        <RadioButton Content="连接" GroupName="tab1_0" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}"/>
+                                        <RadioButton Content="断开" GroupName="tab1_0" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Grid.Row="0" Grid.Column="1" Header="HVIL1状态" >
+                                    <StackPanel Orientation="Horizontal" x:Name="CC_Ve_HVIL_State1" >
+                                        <RadioButton Content="连接" GroupName="tab1_1" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}"/>
+                                        <RadioButton Content="断开" GroupName="tab1_1" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox  Grid.Row="0" Grid.Column="2" Header="HVIL2状态">
+                                    <StackPanel Orientation="Horizontal" x:Name="CC_Ve_HVIL_State2">
+                                        <RadioButton Content="连接" GroupName="tab1_2" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}"/>
+                                        <RadioButton Content="断开" GroupName="tab1_2" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}"/>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox  Grid.Row="1" Grid.Column="0" Header="预充接触器状态"  >
+                                    <StackPanel Orientation="Horizontal" x:Name="CC_Ve_PrechgRelayState">
+                                        <RadioButton Content="闭合" GroupName="tab1_3"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}"/>
+                                        <RadioButton Content="断开" GroupName="tab1_3"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Grid.Row="1" Grid.Column="1" Header="总正接触器状态" >
+                                    <StackPanel Orientation="Horizontal" x:Name="CC_Ve_PosRelayState" >
+                                        <RadioButton Content="闭合" GroupName="tab1_4"    IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}"/>
+                                        <RadioButton Content="断开" GroupName="tab1_4"     IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Grid.Row="1" Grid.Column="2" Header="总负接触器状态" >
+                                    <StackPanel Orientation="Horizontal"  x:Name="CC_Ve_NegRelayState">
+                                        <RadioButton Content="闭合" GroupName="tab1_5" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}"/>
+                                        <RadioButton Content="断开" GroupName="tab1_5" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}"/>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox  Grid.Row="2" Grid.Column="0" Header="慢充预充接触器状态" >
+                                    <StackPanel Orientation="Horizontal" x:Name="CC_Ve_OBC_PrechgRelayState">
+                                        <RadioButton Content="闭合" GroupName="tab1_6" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}"/>
+                                        <RadioButton Content="断开" GroupName="tab1_6" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}"/>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox  Grid.Row="2" Grid.Column="1" Header="慢充正极接触器状态" >
+                                    <StackPanel Orientation="Horizontal" x:Name="CC_Ve_OBC_PosRelayState">
+                                        <RadioButton Content="闭合" GroupName="tab1_7"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}"/>
+                                        <RadioButton Content="断开" GroupName="tab1_7" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}"/>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox  Grid.Row="2" Grid.Column="2" Header="慢充负极接触器状态" >
+                                    <StackPanel Orientation="Horizontal" x:Name="CC_Ve_OBC_NegRelayState">
+                                        <RadioButton Content="闭合" GroupName="tab1_8"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}"/>
+                                        <RadioButton Content="断开" GroupName="tab1_8" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}"/>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox  Grid.Row="3" Grid.Column="0" Header="快充预充接触器状态" >
+                                    <StackPanel Orientation="Horizontal" x:Name="CC_Ve_FCH_PrechgRelayState">
+                                        <RadioButton Content="闭合" GroupName="tab1_9"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}"/>
+                                        <RadioButton Content="断开" GroupName="tab1_9" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox  Grid.Row="3" Grid.Column="1" Header="快充正极接触器状态" >
+                                    <StackPanel Orientation="Horizontal" x:Name="CC_Ve_FCH_PosRelayState">
+                                        <RadioButton Content="闭合" GroupName="tab1_10"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}"/>
+                                        <RadioButton Content="断开" GroupName="tab1_10"   IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Grid.Row="3" Grid.Column="2" Header="碰撞状态" >
+                                    <StackPanel Orientation="Horizontal"  x:Name="CC_Ve_CrashState">
+                                        <RadioButton Content="碰撞" GroupName="tab1_11"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}"/>
+                                        <RadioButton Content="未碰撞" GroupName="tab1_11" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}"/>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox  Grid.Row="4" Grid.Column="0" Header="CC2信号状态" >
+                                    <StackPanel Orientation="Horizontal" x:Name="CC_Ve_CC2State">
+                                        <RadioButton Content="连接" GroupName="tab1_12" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                                        <RadioButton Content="断开" GroupName="tab1_12"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Grid.Row="4" Grid.Column="1" Header="单体电池总数" >
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"  x:Name="TotalNum_Cell">
+                                        <TextBlock Text="{Binding Data,StringFormat={}{0:n0}}" Foreground="#0070C0" FontWeight="Bold" FontSize="14" />
+                                        <TextBlock Text="个"/>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Grid.Row="4" Grid.Column="2" Header="温度传感器总数" >
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"  x:Name="TotalNum_TempSensor">
+                                        <TextBlock Text="{Binding Data,StringFormat={}{0:n0}}" Foreground="#0070C0" FontWeight="Bold" FontSize="14" />
+                                        <TextBlock Text="个"/>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Grid.Row="5" Grid.Column="1" Header="电池SOC" >
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"  x:Name="INHW_Ve_HvBattSoc" >
+                                        <TextBlock Text="{Binding Data,StringFormat={}{0:n2}}" Foreground="#0070C0" FontWeight="Bold" FontSize="14" />
+                                        <TextBlock Text="%"/>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Grid.Row="5" Grid.Column="2" Header="电池平均温度" Grid.ColumnSpan="2" >
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"  x:Name="INHW_Ve_AvgTemp" >
+                                        <TextBlock Text="{Binding Data,StringFormat={}{0:n1}}" Foreground="#0070C0" FontWeight="Bold" FontSize="14" />
+                                        <TextBlock Text="℃"/>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Grid.Row="5" Grid.Column="0" Header="绝缘状态" >
+                                    <StackPanel Orientation="Horizontal" x:Name="CC_IsoRes_state" >
+                                        <RadioButton Content="OK  " GroupName="tab1_13"  IsChecked="{Binding Data,Converter={StaticResource IsoResStateConverter }, ConverterParameter=0}"/>
+                                        <RadioButton Content="Lv1  " GroupName="tab1_13" IsChecked="{Binding Data,Converter={StaticResource IsoResStateConverter }, ConverterParameter=1}" />
+                                        <RadioButton Content="Lv2  " GroupName="tab1_13" IsChecked="{Binding Data,Converter={StaticResource IsoResStateConverter }, ConverterParameter=2}"/>
+                                    </StackPanel>
+                                </GroupBox>
+                            </Grid>
+                        </GroupBox>
+                        <GroupBox Grid.Row="0" Grid.Column="1" Header="电池状态信息2 " >
+                            <Grid Margin="3,0">
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="58"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <StackPanel Orientation="Vertical" x:Name="INHW_Ve_IsoRes">
+                                    <TextBlock Text="电池绝缘阻值（Kohm)" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+
+                                    <!--<led:DigitalPanelControl x:Name="ledTest1" Width="100" Height="60"  
+                Value="{Binding LedDigitalValue1, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                DigitalCount="3" 
+                DigitalColor="Green"  >-->
+                                    <Viewbox Width="auto" Height="24"  Margin="10,5"  >
+                                        <led:DigitalPanelControl x:Name="ledTest1"  Height="60" Width="380"  Value="{Binding Data,StringFormat={}{0:n3}}"  DigitalCount="11" DigitalColor="#006800" />
+                                    </Viewbox>
+                                </StackPanel>
+                                <StackPanel Grid.Row="1" x:Name="INHW_Ve_CoolantTemp_In" >
+                                    <Border Grid.Row="1" BorderThickness="0,0.5,0,0" BorderBrush="#FFD5DFE5" Margin="2" DockPanel.Dock="Top"/>
+                                    <TextBlock Text="进水口温度（℃)"  TextAlignment="Left"/>
+                                    <Viewbox Width="auto" Height="24"  Margin="10,20"  >
+                                        <led:DigitalPanelControl   Height="60" Width="180"   Value="{Binding Data,StringFormat={}{0:n1}}"   DigitalCount="5" DigitalColor="#006800" />
+                                    </Viewbox>
+
+                                </StackPanel>
+                                <StackPanel Grid.Row="2" x:Name="INHW_Ve_CoolantTemp_Out">
+                                    <TextBlock Text="出水口温度（℃)" DockPanel.Dock="Top" TextAlignment="Left"/>
+                                    <Viewbox Width="auto" Height="24"  Margin="10,20">
+                                        <led:DigitalPanelControl   Height="60" Width="180"   Value="{Binding Data,StringFormat={}{0:n1}}"   DigitalCount="5" DigitalColor="#006800" />
+                                    </Viewbox>
+
+                                </StackPanel>
+                            </Grid>
+                        </GroupBox>
+                        <GroupBox Grid.Row="0" Grid.Column="2" Header="电池组状态">
+                            <Grid>
+                                <Grid.Resources>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Margin" Value="3,0"/>
+                                        <Setter Property="VerticalAlignment" Value="Top"/>
+                                        <Setter Property="Width" Value="140"/>
+                                        <Setter Property="TextAlignment" Value="Right"/>
+                                    </Style>
+                                </Grid.Resources>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <StackPanel Grid.Row="0" Orientation="Horizontal" x:Name="INHW_Ve_CellVSumTotVolt">
+                                    <TextBlock Text="电池电压累加和（V）" />
+                                    <Viewbox Width="auto" Height="24"  >
+                                        <led:DigitalPanelControl   Height="60" Width="180"  Value="{Binding Data,StringFormat={}{0:n2}}"  DigitalCount="5" DigitalColor="#006800" />
+                                    </Viewbox>
+                                </StackPanel>
+                                <StackPanel Grid.Row="1" Orientation="Horizontal" x:Name="INHW_Ve_DchBusVolt">
+                                    <TextBlock Text="电池DCBus电压（V）" Width="140"/>
+                                    <Viewbox Width="auto" Height="24"  >
+                                        <led:DigitalPanelControl   Height="60" Width="180" Value="{Binding Data,StringFormat={}{0:n2}}"  DigitalCount="5" DigitalColor="#006800" />
+                                    </Viewbox>
+                                </StackPanel>
+                                <StackPanel Grid.Row="2" Orientation="Horizontal" x:Name="INHW_Ve_DchLinkVolt">
+                                    <TextBlock Text="电池DCLink电压（V）" Width="140"/>
+                                    <Viewbox Width="auto" Height="24"  >
+                                        <led:DigitalPanelControl   Height="60" Width="180" Value="{Binding Data,StringFormat={}{0:n2}}"   DigitalCount="5" Grid.Column="5" DigitalColor="#006800" />
+                                    </Viewbox>
+                                </StackPanel>
+                                <StackPanel Grid.Row="3" Orientation="Horizontal" x:Name="INHW_Ve_ChargBusVolt">
+                                    <TextBlock Text="电池ChargeBus电压（V）" Width="140"/>
+                                    <Viewbox Width="auto" Height="24"  >
+                                        <led:DigitalPanelControl   Height="60" Width="180"  Value="{Binding Data,StringFormat={}{0:n2}}"  DigitalCount="5"  Grid.Column="5" DigitalColor="#006800" />
+                                    </Viewbox>
+                                </StackPanel>
+                                <StackPanel Grid.Row="4" Orientation="Horizontal" x:Name="INHW_Ve_FuseVolt">
+                                    <TextBlock Text="电池Fuse电压（V）" Width="140" />
+                                    <Viewbox Width="auto" Height="24"  >
+                                        <led:DigitalPanelControl   Height="60" Width="180"  Value="{Binding Data,StringFormat={}{0:n2}}"  DigitalCount="5"  Grid.Column="5" DigitalColor="#006800" />
+                                    </Viewbox>
+                                </StackPanel>
+                            </Grid>
+                        </GroupBox>
+                        <GroupBox Grid.Row="0" Grid.Column="3" Header="BMS工作模式">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="系统模式"/>
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="行车模式状态"/>
+                                <TextBlock Grid.Row="2" Grid.Column="0" Text="直流快充请求状态"/>
+                                <TextBlock Grid.Row="3" Grid.Column="0" Text="交流充电模式状态"/>
+                                <TextBlock Grid.Row="4" Grid.Column="0" Text="直流快充模式状态"/>
+                                <TextBlock Grid.Row="5" Grid.Column="0" Text="直流快充接触器控制模式"/>
+                                <TextBlock Grid.Row="6" Grid.Column="0" Text="行车模式接触器控制模式"/>
+                                <TextBlock Grid.Row="7" Grid.Column="0" Text="热管理模式状态"/>
+                                <TextBlock Grid.Row="8" Grid.Column="0" Text="交流充电接触器控制模式"/>
+                                <StackPanel  Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" x:Name="mWMD_SysMod_U08">
+                                    <TextBlock TextAlignment="Left" FontWeight="Bold" FontSize="14" Foreground="#0070C0" Text="{Binding Data}"/>
+                                </StackPanel>
+                                <StackPanel  Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" x:Name="mWMD_DrvModSts_U08" >
+                                    <TextBlock  TextAlignment="Left" FontWeight="Bold" FontSize="14" Foreground="#0070C0" Text="{Binding Data}"/>
+                                </StackPanel>
+                                <StackPanel  Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" x:Name="mCHG_DcChgReqMod_U08">
+                                    <TextBlock TextAlignment="Left" FontWeight="Bold" FontSize="14" Foreground="#0070C0" Text="{Binding Data}"/>
+                                </StackPanel>
+                                <StackPanel  Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" x:Name="mCHG_AcChgModSts_U08">
+                                    <TextBlock  TextAlignment="Left" FontWeight="Bold" FontSize="14" Foreground="#0070C0" Text="{Binding Data}"/>
+                                </StackPanel>
+                                <StackPanel  Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" x:Name="mCHG_DcChgModSts_U08">
+                                    <TextBlock  TextAlignment="Left" FontWeight="Bold" FontSize="14" Foreground="#0070C0" Text="{Binding Data}"/>
+                                </StackPanel>
+                                <StackPanel   Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" x:Name="mRLY_DcChgRlyCtrlMod_U08">
+                                    <TextBlock TextAlignment="Left" FontWeight="Bold" FontSize="14" Foreground="#0070C0" Text="{Binding Data}"/>
+                                </StackPanel>
+                                <StackPanel  Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" x:Name="mRLY_DrvRlyCtrlMod_U08">
+                                    <TextBlock  TextAlignment="Left" FontWeight="Bold" FontSize="14" Foreground="#0070C0" Text="{Binding Data}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" x:Name="mTHM_ModSts_U08">
+                                    <TextBlock  TextAlignment="Left" FontWeight="Bold" FontSize="14" Foreground="#0070C0" Text="{Binding Data}"/>
+                                </StackPanel>
+                                <StackPanel  Grid.Row="8" Grid.Column="1"  VerticalAlignment="Center" x:Name="mRLY_AcChgRlyCtrlMod_U08">
+                                    <TextBlock TextAlignment="Left" FontWeight="Bold" FontSize="14" Foreground="#0070C0" Text="{Binding Data}"/>
+                                </StackPanel>
+                            </Grid>
+                        </GroupBox>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="243*" />
+                            <ColumnDefinition Width="451*" />
+                            <ColumnDefinition Width="201*" />
+                            <ColumnDefinition Width="371*"/>
+                        </Grid.ColumnDefinitions>
+                        <GroupBox Grid.Row="0" Grid.Column="0" Header="电池温度状态">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="26"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="26"/>
+                                    <RowDefinition Height="26"/>
+                                </Grid.RowDefinitions>
+
+                                <Canvas Grid.Row="1" x:Name="canvasMaxTemp" >
+
+                                </Canvas>
+                                <StackPanel Grid.Row="2" Orientation="Horizontal"   x:Name="INHW_Ve_CellMaxTemp">
+                                    <TextBlock Text="最高温度"  />
+                                    <Viewbox Width="auto" Height="24"  >
+                                        <led:DigitalPanelControl  Height="60" Width="150"  Value="{Binding Data,StringFormat={}{0:n1}}"  DigitalCount="5"   Grid.Column="5" DigitalColor="#006800"/>
+                                    </Viewbox>
+                                </StackPanel>
+
+                                <Canvas x:Name="canvasMinTemp" Grid.Row="1" Grid.Column="1" >
+
+                                </Canvas>
+
+                                <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" x:Name="INHW_Ve_CellMinTemp">
+                                    <TextBlock Text="最低温度" />
+                                    <Viewbox Width="auto" Height="24"  >
+                                        <led:DigitalPanelControl   Height="60" Width="150"  Value="{Binding Data,StringFormat={}{0:n1}}"  DigitalCount="5"  Grid.Column="5" DigitalColor="#006800"  />
+                                    </Viewbox>
+                                </StackPanel>
+                                <StackPanel Grid.Row="3" Orientation="Horizontal" x:Name="INHW_Ve_CellMaxTempNo">
+                                    <TextBlock Text="温度编号" />
+                                    <Viewbox Width="auto" Height="24" >
+                                        <led:DigitalPanelControl   Height="60" Width="150"  Value="{Binding Data,StringFormat={}{0:n0}}"  DigitalCount="5"  DigitalColor="#006800" />
+                                    </Viewbox>
+
+                                </StackPanel>
+                                <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" x:Name="INHW_Ve_CellMinTempNo">
+                                    <TextBlock Text="温度编号" />
+                                    <Viewbox Width="auto" Height="24"  >
+                                        <led:DigitalPanelControl   Height="60" Width="150"  Value="{Binding Data,StringFormat={}{0:n0}}"  DigitalCount="5"   DigitalColor="#006800" />
+                                    </Viewbox>
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" x:Name="INHW_Ve_TempDiffMax">
+                                    <TextBlock Text="电池温差" />
+                                    <Viewbox Width="auto" Height="24"  Margin="10,0">
+                                        <led:DigitalPanelControl   Height="60" Width="180"  Value="{Binding Data,StringFormat={}{0:n1}}"  DigitalCount="5" DigitalColor="#006800" />
+                                    </Viewbox>
+                                    <TextBlock Text="(℃)"/>
+                                </StackPanel>
+                            </Grid>
+                        </GroupBox>
+                        <Grid Grid.Column="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="7*"/>
+                                <RowDefinition Height="2*"/>
+                            </Grid.RowDefinitions>
+                            <GroupBox Header="唤醒源状态">
+                                <Grid>
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Border BorderThickness="1" BorderBrush="#FFD5DFE5" CornerRadius="2" Padding="2">
+                                        <StackPanel>
+                                            <StackPanel Orientation="Horizontal" x:Name="DV_CAN_WakeUpSource">
+                                                <TextBlock Text="唤醒源来源" TextAlignment="Right" Width="85"/>
+                                                <TextBlock Text="{Binding Data}" Foreground="#0070C0" FontWeight="Bold" FontSize="14"/>
+
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" x:Name="DV_CAN_KeyOnWakeSts">
+                                                <TextBlock Text="钥匙火唤醒状态" TextAlignment="Right" Width="85" />
+                                                <TextBlock Text="{Binding Data}" Foreground="#0070C0" FontWeight="Bold" FontSize="14"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" x:Name="DV_CAN_OBCWakeUpSts">
+                                                <TextBlock Text="OBC唤醒状态" TextAlignment="Right" Width="85"/>
+                                                <TextBlock Text="{Binding Data}" Foreground="#0070C0" FontWeight="Bold" FontSize="14"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" x:Name="DV_CAN_RTCWakeUpSts" >
+                                                <TextBlock Text="RTC唤醒状态" TextAlignment="Right" Width="85"/>
+                                                <TextBlock Text="{Binding Data}" Foreground="#0070C0" FontWeight="Bold" FontSize="14"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" x:Name="DV_CAN_CANWakeUpSts">
+                                                <TextBlock Text="CAN唤醒状态" TextAlignment="Right" Width="85"/>
+                                                <TextBlock Text="{Binding Data}" Foreground="#0070C0" FontWeight="Bold" FontSize="14"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" x:Name="DV_CAN_EVCCWakeUpSts" >
+                                                <TextBlock Text="EVCC唤醒状态" TextAlignment="Right" Width="85"/>
+                                                <TextBlock Text="{Binding Data}" Foreground="#0070C0" FontWeight="Bold" FontSize="14"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" x:Name="DV_CAN_CPSRWakeUpSts">
+                                                <TextBlock Text="CPSR唤醒状态" TextAlignment="Right" Width="85"/>
+                                                <TextBlock Text="{Binding Data}" Foreground="#0070C0" FontWeight="Bold" FontSize="14"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+                                    <StackPanel Grid.Row="1" Orientation="Horizontal" x:Name="DV_CAN_CPSRSupVolt">
+                                        <TextBlock Text="CPSR供电电压（V）" Width="120" TextAlignment="Right" />
+                                        <Viewbox Width="auto" Height="24" >
+                                            <led:DigitalPanelControl   Height="60" Width="150"  Value="{Binding Data,StringFormat={}{0:n1}}"  DigitalCount="5"   DigitalColor="#006800" />
+                                        </Viewbox>
+                                    </StackPanel>
+                                    <StackPanel Grid.Row="2" Orientation="Horizontal" x:Name="DV_CAN_KL30SupVolt">
+                                        <TextBlock Text="KL30供电电压（V）" Width="120" TextAlignment="Right" />
+                                        <Viewbox Width="auto" Height="24"  >
+                                            <led:DigitalPanelControl   Height="60" Width="150"  Value="{Binding Data ,StringFormat={}{0:n1}}"  DigitalCount="5"    DigitalColor="#006800" />
+                                        </Viewbox>
+                                    </StackPanel>
+                                    <StackPanel Grid.Row="3" Orientation="Horizontal" x:Name="DV_CAN_CVSSupVolt">
+                                        <TextBlock Text="CVS供电电压（V）"  Width="120" TextAlignment="Right"/>
+                                        <Viewbox Width="auto" Height="24"  >
+                                            <led:DigitalPanelControl   Height="60" Width="150"  Value="{Binding Data,StringFormat={}{0:n1}}"   DigitalCount="5"  DigitalColor="#006800" />
+                                        </Viewbox>
+                                    </StackPanel>
+                                </Grid>
+                            </GroupBox>
+                            <GroupBox Grid.Row="1" Header="BMS版本信息">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <StackPanel Grid.Row="0" Orientation="Horizontal" x:Name="ST_Ve_SWVersion">
+                                        <TextBlock Text="BMS软件版本" Width="85" TextAlignment="Right" />
+                                        <TextBlock Text="{Binding Data}" Foreground="#0070C0" FontWeight="Bold" FontSize="14"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Row="1" Orientation="Horizontal" x:Name="ST_Ve_HWVersion">
+                                        <TextBlock Text="BMS硬件版本" Width="85" TextAlignment="Right" />
+                                        <TextBlock Text="{Binding Data}" Foreground="#0070C0" FontWeight="Bold" FontSize="14"/>
+                                    </StackPanel>
+                                </Grid>
+                            </GroupBox>
+                        </Grid>
+                        <Grid Grid.Column="1" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" x:Name="INHW_Ve_VoltDiffMax">
+                                <TextBlock Text="电池压差" />
+                                <Viewbox Width="auto" Height="24"  Margin="10,0">
+                                    <led:DigitalPanelControl   Height="60" Width="180"  Value="{Binding Data, Converter={StaticResource unit_mvToV},StringFormat={}{0:n3}}"  DigitalCount="5"     DigitalColor="#006800" />
+                                </Viewbox>
+                                <TextBlock Text="(V)"/>
+                            </StackPanel>
+                            <Canvas Grid.Row="1" x:Name="gaugeCanvas" Margin="10" >
+
+                                <Path StrokeThickness="15" Width="210" Height="200" StrokeStartLineCap="Round" >
+                                    <Path.Data>
+                                        <PathGeometry Figures="M 0,100 A 100,100 0 0 1 29.28932,29.28932"/>
+                                    </Path.Data>
+                                    <Path.Stroke>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <LinearGradientBrush.GradientStops>
+
+                                                <GradientStop Offset="0.4" Color="Red"/>
+                                                <GradientStop Offset="0.9" Color="Red"/>
+                                            </LinearGradientBrush.GradientStops>
+                                        </LinearGradientBrush>
+                                    </Path.Stroke>
+                                </Path>
+
+                                <Path StrokeThickness="15" Width="210" Height="200">
+                                    <Path.Data>
+                                        <PathGeometry Figures="M 28.28932,30.28932 A 100,100 0 0 1 170.81068,30.28932" />
+                                    </Path.Data>
+                                    <Path.Stroke>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                            <LinearGradientBrush.GradientStops>
+                                                <GradientStop Offset="0.3" Color="Red" />
+                                                <GradientStop Offset="0.7" Color="Yellow"/>
+                                                <GradientStop Offset="0.9" Color="Green"/>
+                                            </LinearGradientBrush.GradientStops>
+                                        </LinearGradientBrush>
+                                    </Path.Stroke>
+                                </Path>
+                                <Path  StrokeThickness="15" Width="210" Height="200" StrokeEndLineCap="Round">
+                                    <Path.Data>
+                                        <PathGeometry Figures="M 170.21068,29.28932 A 100,100 0 0 1 200,100" />
+                                    </Path.Data>
+                                    <Path.Stroke>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                            <LinearGradientBrush.GradientStops>
+                                                <GradientStop Offset="0.1" Color="Green"/>
+                                                <GradientStop Offset="0.4" Color="Yellow"/>
+                                                <GradientStop Offset="0.7" Color="Red"/>
+                                            </LinearGradientBrush.GradientStops>
+                                        </LinearGradientBrush>
+                                    </Path.Stroke>
+                                </Path>
+                                <Path x:Name="pinMaxCellVolt" Fill="Orange">
+                                    <Path.Data>
+                                        <PathGeometry>
+                                            <PathGeometry.Figures>
+                                                <PathFigure StartPoint="100,98" IsClosed="True">
+                                                    <PathFigure.Segments>
+                                                        <LineSegment Point="10,100"/>
+                                                        <LineSegment Point="100,103"/>
+                                                    </PathFigure.Segments>
+                                                </PathFigure>
+                                            </PathGeometry.Figures>
+                                        </PathGeometry>
+                                    </Path.Data>
+                                </Path>
+                                <TextBlock   Canvas.Top="120" Canvas.Left="63" Text="最大单体电压" />
+                                <TextBlock  FontSize="12"  Canvas.Left="94" Canvas.Top="45"  Text="V" FontWeight="Black"/>
+                                <StackPanel  Canvas.Left="80" Canvas.Top="70" x:Name="INHW_Ve_CellMaxVolt">
+                                    <TextBox BorderThickness="0" IsReadOnly="True" x:Name="cvsMaxVolt" FontSize="16"   Text="{Binding Data,Converter={StaticResource unit_mvToV} ,StringFormat={}{0:n3}}" FontWeight="Black"  />
+                                </StackPanel>
+                                <StackPanel  Canvas.Left="80" Canvas.Top="132" x:Name="INHW_Ve_CellMaxVoltNo" Orientation="Horizontal">
+                                    <TextBlock   Canvas.Top="120" Canvas.Left="63" Text="编号：" />
+                                    <TextBlock x:Name="cvsMaxVoltNo" FontSize="16"   Text="{Binding Data}" FontWeight="Black"   />
+                                </StackPanel>
+                            </Canvas>
+
+                            <Canvas  x:Name="gaugeCanvas00" Margin="10" Grid.Row="1" Grid.Column="1">
+
+                                <Path StrokeThickness="15" Width="210" Height="200" StrokeStartLineCap="Round" >
+                                    <Path.Data>
+                                        <PathGeometry Figures="M 0,100 A 100,100 0 0 1 29.28932,29.28932"/>
+                                    </Path.Data>
+                                    <Path.Stroke>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <LinearGradientBrush.GradientStops>
+
+                                                <GradientStop Offset="0.4" Color="Red"/>
+                                                <GradientStop Offset="0.9" Color="Red"/>
+                                            </LinearGradientBrush.GradientStops>
+                                        </LinearGradientBrush>
+                                    </Path.Stroke>
+                                </Path>
+
+                                <Path StrokeThickness="15" Width="210" Height="200">
+                                    <Path.Data>
+                                        <PathGeometry Figures="M 28.28932,30.28932 A 100,100 0 0 1 170.81068,30.28932" />
+                                    </Path.Data>
+                                    <Path.Stroke>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                            <LinearGradientBrush.GradientStops>
+                                                <GradientStop Offset="0.3" Color="Red" />
+                                                <GradientStop Offset="0.7" Color="Yellow"/>
+                                                <GradientStop Offset="0.9" Color="Green"/>
+                                            </LinearGradientBrush.GradientStops>
+                                        </LinearGradientBrush>
+                                    </Path.Stroke>
+                                </Path>
+                                <Path  StrokeThickness="15" Width="210" Height="200" StrokeEndLineCap="Round">
+                                    <Path.Data>
+                                        <PathGeometry Figures="M 170.21068,29.28932 A 100,100 0 0 1 200,100" />
+                                    </Path.Data>
+                                    <Path.Stroke>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                            <LinearGradientBrush.GradientStops>
+                                                <GradientStop Offset="0.1" Color="Green"/>
+                                                <GradientStop Offset="0.4" Color="Yellow"/>
+                                                <GradientStop Offset="0.7" Color="Red"/>
+                                            </LinearGradientBrush.GradientStops>
+                                        </LinearGradientBrush>
+                                    </Path.Stroke>
+                                </Path>
+                                <Path x:Name="pinMinCellVolt" Fill="Orange">
+                                    <Path.Data>
+                                        <PathGeometry>
+                                            <PathGeometry.Figures>
+                                                <PathFigure StartPoint="100,98" IsClosed="True">
+                                                    <PathFigure.Segments>
+                                                        <LineSegment Point="10,100"/>
+                                                        <LineSegment Point="100,103"/>
+                                                    </PathFigure.Segments>
+                                                </PathFigure>
+                                            </PathGeometry.Figures>
+                                        </PathGeometry>
+                                    </Path.Data>
+                                </Path>
+                                <TextBlock   Canvas.Top="120" Canvas.Left="63" Text="最小单体电压" />
+                                <TextBlock  FontSize="12"  Canvas.Left="94" Canvas.Top="45"  Text="V" FontWeight="Bold"/>
+                                <StackPanel  Canvas.Left="80" Canvas.Top="70" x:Name="INHW_Ve_CellMinVolt">
+                                    <TextBox BorderThickness="0" IsReadOnly="True" x:Name="cvsMinVolt" FontSize="16"   Text="{Binding Data,StringFormat={}{0:n3}, Converter={StaticResource unit_mvToV}}" FontWeight="Black"  />
+                                </StackPanel>
+                                <StackPanel  Canvas.Left="80" Canvas.Top="132" Orientation="Horizontal" x:Name="INHW_Ve_CellMinVoltNo">
+                                    <TextBlock   Canvas.Top="120" Canvas.Left="63" Text="编号：" />
+                                    <TextBlock x:Name="cvMinVoltNo" FontSize="16"   Text="{Binding Data}" FontWeight="Black"/>
+                                </StackPanel>
+                            </Canvas>
+                            <Canvas x:Name="gaugeCanvas01" Grid.Row="2" Grid.Column="0" Margin="10" >
+
+                                <Path StrokeThickness="15" Width="210" Height="200" StrokeStartLineCap="Round" >
+                                    <Path.Data>
+                                        <PathGeometry Figures="M 0,100 A 100,100 0 0 1 29.28932,29.28932"/>
+                                    </Path.Data>
+                                    <Path.Stroke>
+                                        <LinearGradientBrush StartPoint="1,1" EndPoint="0,0">
+                                            <LinearGradientBrush.GradientStops>
+
+                                                <GradientStop Offset="0.9" Color="Orange"/>
+                                                <GradientStop Offset="0.7" Color="Orange"/>
+                                                <GradientStop Offset="0.5" Color="Red"/>
+                                            </LinearGradientBrush.GradientStops>
+                                        </LinearGradientBrush>
+                                    </Path.Stroke>
+                                </Path>
+
+                                <Path StrokeThickness="15" Width="210" Height="200">
+                                    <Path.Data>
+                                        <PathGeometry Figures="M 28.28932,30.28932 A 100,100 0 0 1 170.81068,30.28932" />
+                                    </Path.Data>
+                                    <Path.Stroke>
+                                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                            <LinearGradientBrush.GradientStops>
+                                                <GradientStop Offset="0.1" Color="Orange" />
+                                                <GradientStop Offset="0.2" Color="Yellow"/>
+                                                <GradientStop Offset="0.3" Color="Yellow"/>
+                                                <GradientStop Offset="0.5" Color="MediumSeaGreen"/>
+                                                <GradientStop Offset="0.7" Color="Yellow"/>
+                                                <GradientStop Offset="0.8" Color="Yellow"/>
+                                                <GradientStop Offset="0.9" Color="Orange"/>
+                                            </LinearGradientBrush.GradientStops>
+                                        </LinearGradientBrush>
+                                    </Path.Stroke>
+                                </Path>
+                                <Path  StrokeThickness="15" Width="210" Height="200" StrokeEndLineCap="Round">
+                                    <Path.Data>
+                                        <PathGeometry Figures="M 170.21068,29.28932 A 100,100 0 0 1 200,100" />
+                                    </Path.Data>
+                                    <Path.Stroke>
+                                        <LinearGradientBrush StartPoint="0,1" EndPoint="1,0">
+                                            <LinearGradientBrush.GradientStops>
+                                                <GradientStop Offset="0.9" Color="Orange"/>
+                                                <GradientStop Offset="0.7" Color="Orange"/>
+                                                <GradientStop Offset="0.5" Color="Red"/>
+                                            </LinearGradientBrush.GradientStops>
+                                        </LinearGradientBrush>
+                                    </Path.Stroke>
+                                </Path>
+                                <Path x:Name="pinCurr" Fill="Orange"  >
+                                    <Path.Data>
+                                        <PathGeometry>
+                                            <PathGeometry.Figures>
+                                                <PathFigure StartPoint="98,100" IsClosed="True">
+                                                    <PathFigure.Segments>
+                                                        <LineSegment Point="100,10"/>
+                                                        <LineSegment Point="103,100"/>
+                                                    </PathFigure.Segments>
+                                                </PathFigure>
+                                            </PathGeometry.Figures>
+                                        </PathGeometry>
+                                    </Path.Data>
+                                </Path>
+                                <TextBlock   Canvas.Top="120" Canvas.Left="80" Text="总电流" />
+                                <TextBlock  FontSize="12"  Canvas.Left="94" Canvas.Top="45"  Text="A" FontWeight="Black"/>
+                                <StackPanel  Canvas.Left="75" Canvas.Top="70" x:Name="INHW_Ve_BattCurr">
+                                    <TextBox BorderThickness="0" IsReadOnly="True" x:Name="cvsBattCurr" FontSize="16"   Text="{Binding Data,StringFormat={}{0:n1}}" FontWeight="Black" />
+                                </StackPanel>
+                            </Canvas>
+                            <Canvas x:Name="gaugeCanvas02" Grid.Row="2" Grid.Column="1" Margin="10" >
+
+                                <Path StrokeThickness="15" Width="210" Height="200" StrokeStartLineCap="Round" >
+                                    <Path.Data>
+                                        <PathGeometry Figures="M 0,100 A 100,100 0 0 1 29.28932,29.28932"/>
+                                    </Path.Data>
+                                    <Path.Stroke>
+                                        <LinearGradientBrush StartPoint="1,1" EndPoint="0,0">
+                                            <LinearGradientBrush.GradientStops>
+
+                                                <GradientStop Offset="0.9" Color="Orange"/>
+                                                <GradientStop Offset="0.7" Color="Orange"/>
+                                                <GradientStop Offset="0.5" Color="Red"/>
+                                            </LinearGradientBrush.GradientStops>
+                                        </LinearGradientBrush>
+                                    </Path.Stroke>
+                                </Path>
+
+                                <Path StrokeThickness="15" Width="210" Height="200">
+                                    <Path.Data>
+                                        <PathGeometry Figures="M 28.28932,30.28932 A 100,100 0 0 1 170.81068,30.28932" />
+                                    </Path.Data>
+                                    <Path.Stroke>
+                                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                            <LinearGradientBrush.GradientStops>
+                                                <GradientStop Offset="0.1" Color="Orange" />
+                                                <GradientStop Offset="0.2" Color="Yellow"/>
+                                                <GradientStop Offset="0.3" Color="Yellow"/>
+                                                <GradientStop Offset="0.5" Color="MediumSeaGreen"/>
+                                                <GradientStop Offset="0.7" Color="Yellow"/>
+                                                <GradientStop Offset="0.8" Color="Yellow"/>
+                                                <GradientStop Offset="0.9" Color="Orange"/>
+                                            </LinearGradientBrush.GradientStops>
+                                        </LinearGradientBrush>
+                                    </Path.Stroke>
+                                </Path>
+                                <Path  StrokeThickness="15" Width="210" Height="200" StrokeEndLineCap="Round">
+                                    <Path.Data>
+                                        <PathGeometry Figures="M 170.21068,29.28932 A 100,100 0 0 1 200,100" />
+                                    </Path.Data>
+                                    <Path.Stroke>
+                                        <LinearGradientBrush StartPoint="0,1" EndPoint="1,0">
+                                            <LinearGradientBrush.GradientStops>
+                                                <GradientStop Offset="0.9" Color="Orange"/>
+                                                <GradientStop Offset="0.7" Color="Orange"/>
+                                                <GradientStop Offset="0.5" Color="Red"/>
+                                            </LinearGradientBrush.GradientStops>
+                                        </LinearGradientBrush>
+                                    </Path.Stroke>
+                                </Path>
+                                <Path x:Name="pinVolt" Fill="Orange">
+                                    <Path.Data>
+                                        <PathGeometry>
+                                            <PathGeometry.Figures>
+                                                <PathFigure StartPoint="100,98" IsClosed="True">
+                                                    <PathFigure.Segments>
+                                                        <LineSegment Point="10,100"/>
+                                                        <LineSegment Point="100,103"/>
+                                                    </PathFigure.Segments>
+                                                </PathFigure>
+                                            </PathGeometry.Figures>
+                                        </PathGeometry>
+                                    </Path.Data>
+                                </Path>
+                                <TextBlock   Canvas.Top="120" Canvas.Left="80" Text="总电压" />
+                                <TextBlock  FontSize="12"  Canvas.Left="94" Canvas.Top="45"  Text="V" FontWeight="Black"/>
+                                <StackPanel  Canvas.Left="75" Canvas.Top="70" x:Name="INHW_Ve_BattPackVolt">
+                                    <TextBox BorderThickness="0" IsReadOnly="True" x:Name="cvsBattPackVolt" FontSize="16"   Text="{Binding Data ,StringFormat={}{0:n2}}" FontWeight="Black"  />
+                                </StackPanel>
+                            </Canvas>
+                        </Grid>
+                        <GroupBox Grid.Column="3" Header="控制">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="auto"/>
+
+                                </Grid.ColumnDefinitions>
+                                <GroupBox Header="DV_CAN_NegRly" >
+                                    <StackPanel Orientation="Horizontal" x:Name="DV_CAN_NegRly">
+                                        <RadioButton Content="open" GroupName="tab1_DV0"    IsChecked="{Binding Data,Converter={StaticResource ZeroAsTrueConverter}}"/>
+                                        <RadioButton Content="closed" GroupName="tab1_DV0" IsChecked="{Binding Data,Converter={StaticResource ZeroAsFalseConverter}}" />
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Grid.Column="1" Header="DV_CAN_PosRly">
+                                    <StackPanel Orientation="Horizontal" x:Name="DV_CAN_PosRly">
+                                        <RadioButton Content="open" GroupName="tab1_DV1"     IsChecked="{Binding Data,Converter={StaticResource ZeroAsTrueConverter}}"/>
+                                        <RadioButton Content="closed" GroupName="tab1_DV1"  IsChecked="{Binding Data,Converter={StaticResource ZeroAsFalseConverter}}" />
+                                    </StackPanel>
+                                </GroupBox>
+
+                                <GroupBox Grid.Row="1" Grid.Column="0" Header="DV_CAN_PrechgRly" >
+                                    <StackPanel Orientation="Horizontal" x:Name="DV_CAN_PrechgRly">
+                                        <RadioButton Content="open" GroupName="tab1_DV2" IsChecked="{Binding Data,Converter={StaticResource ZeroAsTrueConverter}}"/>
+                                        <RadioButton Content="closed" GroupName="tab1_DV2" IsChecked="{Binding Data,Converter={StaticResource ZeroAsFalseConverter}}"/>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Grid.Row="1" Grid.Column="1" Header="DV_CAN_IsoResCtrl" >
+                                    <StackPanel Orientation="Horizontal" x:Name="DV_CAN_IsoResCtrl">
+                                        <RadioButton Content="open" GroupName="tab1_DV3"  IsChecked="{Binding Data,Converter={StaticResource ZeroAsFalseConverter}}"/>
+                                        <RadioButton Content="closed" GroupName="tab1_DV3" IsChecked="{Binding Data,Converter={StaticResource ZeroAsTrueConverter}}" />
+                                    </StackPanel>
+                                </GroupBox>
+
+                                <GroupBox Grid.Row="2" Grid.Column="0" Header="DV_CAN_FCH_PosRly" >
+                                    <StackPanel Orientation="Horizontal" x:Name="DV_CAN_FCH_PosRly">
+                                        <RadioButton Content="open" GroupName="tab1_DV4" IsChecked="{Binding Data,Converter={StaticResource ZeroAsTrueConverter}}"/>
+                                        <RadioButton Content="closed" GroupName="tab1_DV4" IsChecked="{Binding Data,Converter={StaticResource ZeroAsFalseConverter}}" />
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Grid.Row="2" Grid.Column="1" Header="DV_CAN_FCH_PrechgRly" >
+                                    <StackPanel Orientation="Horizontal" x:Name="DV_CAN_FCH_PrechgRly">
+                                        <RadioButton Content="open" GroupName="tab1_DV5" IsChecked="{Binding Data,Converter={StaticResource ZeroAsTrueConverter}}" />
+                                        <RadioButton Content="closed" GroupName="tab1_DV5" IsChecked="{Binding Data,Converter={StaticResource ZeroAsFalseConverter}}" />
+                                    </StackPanel>
+                                </GroupBox>
+
+                                <GroupBox Grid.Row="3" Grid.Column="0" Header="DV_CAN_OBC_NegRly" >
+                                    <StackPanel Orientation="Horizontal" x:Name="DV_CAN_OBC_NegRly">
+                                        <RadioButton Content="open" GroupName="tab1_DV6"  IsChecked="{Binding Data,Converter={StaticResource ZeroAsTrueConverter}}"/>
+                                        <RadioButton Content="closed" GroupName="tab1_DV6" IsChecked="{Binding Data,Converter={StaticResource ZeroAsFalseConverter}}" />
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Grid.Row="3" Grid.Column="1" Header="DV_CAN_OBC_PosRly" >
+                                    <StackPanel Orientation="Horizontal" x:Name="DV_CAN_OBC_PosRly">
+                                        <RadioButton Content="open" GroupName="tab1_DV7"   IsChecked="{Binding Data,Converter={StaticResource ZeroAsTrueConverter}}"/>
+                                        <RadioButton Content="closed" GroupName="tab1_DV7" IsChecked="{Binding Data,Converter={StaticResource ZeroAsFalseConverter}}" />
+                                    </StackPanel>
+                                </GroupBox>
+
+                                <GroupBox Grid.Row="4" Grid.Column="0" Header="DV_CAN_OBC_PrechgRly" >
+                                    <StackPanel Orientation="Horizontal" x:Name="DV_CAN_OBC_PrechgRly">
+                                        <RadioButton Content="open" GroupName="tab1_DV8"     IsChecked="{Binding Data,Converter={StaticResource ZeroAsTrueConverter}}"/>
+                                        <RadioButton Content="closed" GroupName="tab1_DV8" IsChecked="{Binding Data,Converter={StaticResource ZeroAsFalseConverter}}" />
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Grid.Row="4" Grid.Column="1" Header="DV_CAN_HvbattSoc" >
+                                    <StackPanel Orientation="Horizontal" x:Name="DV_CAN_HvbattSoc" >
+                                        <TextBlock Text="{Binding Data}"></TextBlock>
+
+                                    </StackPanel>
+                                </GroupBox>
+
+                                <GroupBox Grid.Row="5" Grid.Column="0" Header="DV_CAN_HvbattSocUB_Allow" >
+                                    <StackPanel Orientation="Horizontal" x:Name="DV_CAN_HvbattSocUB_Allow">
+                                        <RadioButton Content="Not Allow" GroupName="tab1_DV10"    IsChecked="{Binding Data,Converter={StaticResource ZeroAsTrueConverter}}"/>
+                                        <RadioButton Content="Allow" GroupName="tab1_DV10"       IsChecked="{Binding Data,Converter={StaticResource ZeroAsFalseConverter}}" />
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Grid.Row="5" Grid.Column="1" Header="DV_CAN_IsoCtrlAllow">
+                                    <StackPanel Orientation="Horizontal" x:Name="DV_CAN_IsoCtrlAllow">
+                                        <RadioButton Content="Not Allow" GroupName="tab1_DV11"   IsChecked="{Binding Data,Converter={StaticResource ZeroAsTrueConverter}}"/>
+                                        <RadioButton Content="Allow" GroupName="tab1_DV11"       IsChecked="{Binding Data,Converter={StaticResource ZeroAsFalseConverter}}" />
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Grid.Row="6" Grid.Column="0" Header="DV_CAN_RlyCtrlAllow" >
+                                    <StackPanel Orientation="Horizontal" x:Name="DV_CAN_RlyCtrlAllow" >
+                                        <TextBlock Text="{Binding  Data,Converter={StaticResource RlyCtrlAllowConverter}}"></TextBlock>
+                                    </StackPanel>
+                                </GroupBox>
+                                <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Height="30">
+                                    <Button x:Name="btnLogin" Content="登陆"  Width="50" Background="#FDB603" BorderBrush="#FFD49A08" Click="btnLogin_Click"  />
+                                    <Button x:Name="btnSend" Content="发送" Margin="5,0" Width="50" Background="#FDB603" BorderBrush="#FFD49A08"  Click="btnSend_Click" IsEnabled="False" />
+                                </StackPanel>
+                            </Grid>
+                        </GroupBox>
+                    </Grid>
+
+                </Grid>
+            </TabItem>
+            <TabItem Header="监控02" >
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.Resources>
+                        <Style TargetType="{x:Type TextBox}">
+                            <Setter Property="Margin" Value="3,0,3,0"/>
+                            <Setter Property="TextAlignment" Value="Right"/>
+                            <Setter Property="Foreground" Value="#0070C0"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="IsReadOnly" Value="True"/>
+                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Text" Value="{Binding Data}"/>
+                            <Setter Property="MinWidth" Value="53"/>
+                        </Style>
+
+                        <Style TargetType="{x:Type StackPanel}">
+                            <Setter Property="Orientation" Value="Horizontal"/>
+                            <Setter Property="IsEnabled" Value="False"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+
+                    </Grid.Resources>
+                    <GroupBox Header="电池电压状态" Grid.RowSpan="2" Background="#03008000">
+                        <Grid>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Grid.Row="0" Text="001"/>
+                            <TextBlock Grid.Column="0" Grid.Row="1" Text="002"/>
+                            <TextBlock Grid.Column="0" Grid.Row="2" Text="003"/>
+                            <TextBlock Grid.Column="0" Grid.Row="3" Text="004"/>
+                            <TextBlock Grid.Column="0" Grid.Row="4" Text="005"/>
+                            <TextBlock Grid.Column="0" Grid.Row="5" Text="006"/>
+                            <TextBlock Grid.Column="0" Grid.Row="6" Text="007"/>
+                            <TextBlock Grid.Column="0" Grid.Row="7" Text="008"/>
+                            <TextBlock Grid.Column="0" Grid.Row="8" Text="009"/>
+                            <TextBlock Grid.Column="0" Grid.Row="9" Text="010"/>
+                            <TextBlock Grid.Column="0" Grid.Row="10" Text="011"/>
+                            <TextBlock Grid.Column="0" Grid.Row="11" Text="012"/>
+                            <TextBlock Grid.Column="0" Grid.Row="12" Text="013"/>
+                            <TextBlock Grid.Column="0" Grid.Row="13" Text="014"/>
+                            <TextBlock Grid.Column="0" Grid.Row="14" Text="015"/>
+                            <TextBlock Grid.Column="0" Grid.Row="15" Text="016"/>
+                            <TextBlock Grid.Column="0" Grid.Row="16" Text="017"/>
+                            <TextBlock Grid.Column="0" Grid.Row="17" Text="018"/>
+                            <TextBlock Grid.Column="0" Grid.Row="18" Text="019"/>
+                            <TextBlock Grid.Column="0" Grid.Row="19" Text="020"/>
+                            <TextBlock Grid.Column="0" Grid.Row="20" Text="021"/>
+                            <TextBlock Grid.Column="0" Grid.Row="21" Text="022"/>
+                            <TextBlock Grid.Column="0" Grid.Row="22" Text="023"/>
+                            <TextBlock Grid.Column="0" Grid.Row="23" Text="024"/>
+                            <TextBlock Grid.Column="0" Grid.Row="24" Text="025"/>
+                            <TextBlock Grid.Column="0" Grid.Row="25" Text="026"/>
+                            <TextBlock Grid.Column="0" Grid.Row="26" Text="027"/>
+                            <TextBlock Grid.Column="0" Grid.Row="27" Text="028"/>
+                            <TextBlock Grid.Column="2" Grid.Row=" 0" Text="029"/>
+                            <TextBlock Grid.Column="2" Grid.Row=" 1" Text="030"/>
+                            <TextBlock Grid.Column="2" Grid.Row=" 2" Text="031"/>
+                            <TextBlock Grid.Column="2" Grid.Row=" 3" Text="032"/>
+                            <TextBlock Grid.Column="2" Grid.Row=" 4" Text="033"/>
+                            <TextBlock Grid.Column="2" Grid.Row=" 5" Text="034"/>
+                            <TextBlock Grid.Column="2" Grid.Row=" 6" Text="035"/>
+                            <TextBlock Grid.Column="2" Grid.Row=" 7" Text="036"/>
+                            <TextBlock Grid.Column="2" Grid.Row=" 8" Text="037"/>
+                            <TextBlock Grid.Column="2" Grid.Row=" 9" Text="038"/>
+                            <TextBlock Grid.Column="2" Grid.Row="10" Text="039"/>
+                            <TextBlock Grid.Column="2" Grid.Row="11" Text="040"/>
+                            <TextBlock Grid.Column="2" Grid.Row="12" Text="041"/>
+                            <TextBlock Grid.Column="2" Grid.Row="13" Text="042"/>
+                            <TextBlock Grid.Column="2" Grid.Row="14" Text="043"/>
+                            <TextBlock Grid.Column="2" Grid.Row="15" Text="044"/>
+                            <TextBlock Grid.Column="2" Grid.Row="16" Text="045"/>
+                            <TextBlock Grid.Column="2" Grid.Row="17" Text="046"/>
+                            <TextBlock Grid.Column="2" Grid.Row="18" Text="047"/>
+                            <TextBlock Grid.Column="2" Grid.Row="19" Text="048"/>
+                            <TextBlock Grid.Column="2" Grid.Row="20" Text="049"/>
+                            <TextBlock Grid.Column="2" Grid.Row="21" Text="050"/>
+                            <TextBlock Grid.Column="2" Grid.Row="22" Text="051"/>
+                            <TextBlock Grid.Column="2" Grid.Row="23" Text="052"/>
+                            <TextBlock Grid.Column="2" Grid.Row="24" Text="053"/>
+                            <TextBlock Grid.Column="2" Grid.Row="25" Text="054"/>
+                            <TextBlock Grid.Column="2" Grid.Row="26" Text="055"/>
+                            <TextBlock Grid.Column="2" Grid.Row="27" Text="056"/>
+                            <TextBlock Grid.Column="4" Grid.Row=" 0" Text="057"/>
+                            <TextBlock Grid.Column="4" Grid.Row=" 1" Text="058"/>
+                            <TextBlock Grid.Column="4" Grid.Row=" 2" Text="059"/>
+                            <TextBlock Grid.Column="4" Grid.Row=" 3" Text="060"/>
+                            <TextBlock Grid.Column="4" Grid.Row=" 4" Text="061"/>
+                            <TextBlock Grid.Column="4" Grid.Row=" 5" Text="062"/>
+                            <TextBlock Grid.Column="4" Grid.Row=" 6" Text="063"/>
+                            <TextBlock Grid.Column="4" Grid.Row=" 7" Text="064"/>
+                            <TextBlock Grid.Column="4" Grid.Row=" 8" Text="065"/>
+                            <TextBlock Grid.Column="4" Grid.Row=" 9" Text="066"/>
+                            <TextBlock Grid.Column="4" Grid.Row="10" Text="067"/>
+                            <TextBlock Grid.Column="4" Grid.Row="11" Text="068"/>
+                            <TextBlock Grid.Column="4" Grid.Row="12" Text="069"/>
+                            <TextBlock Grid.Column="4" Grid.Row="13" Text="070"/>
+                            <TextBlock Grid.Column="4" Grid.Row="14" Text="071"/>
+                            <TextBlock Grid.Column="4" Grid.Row="15" Text="072"/>
+                            <TextBlock Grid.Column="4" Grid.Row="16" Text="073"/>
+                            <TextBlock Grid.Column="4" Grid.Row="17" Text="074"/>
+                            <TextBlock Grid.Column="4" Grid.Row="18" Text="075"/>
+                            <TextBlock Grid.Column="4" Grid.Row="19" Text="076"/>
+                            <TextBlock Grid.Column="4" Grid.Row="20" Text="077"/>
+                            <TextBlock Grid.Column="4" Grid.Row="21" Text="078"/>
+                            <TextBlock Grid.Column="4" Grid.Row="22" Text="079"/>
+                            <TextBlock Grid.Column="4" Grid.Row="23" Text="080"/>
+                            <TextBlock Grid.Column="4" Grid.Row="24" Text="081"/>
+                            <TextBlock Grid.Column="4" Grid.Row="25" Text="082"/>
+                            <TextBlock Grid.Column="4" Grid.Row="26" Text="083"/>
+                            <TextBlock Grid.Column="4" Grid.Row="27" Text="084"/>
+                            <TextBlock Grid.Column="6" Grid.Row=" 0" Text="085"/>
+                            <TextBlock Grid.Column="6" Grid.Row=" 1" Text="086"/>
+                            <TextBlock Grid.Column="6" Grid.Row=" 2" Text="087"/>
+                            <TextBlock Grid.Column="6" Grid.Row=" 3" Text="088"/>
+                            <TextBlock Grid.Column="6" Grid.Row=" 4" Text="089"/>
+                            <TextBlock Grid.Column="6" Grid.Row=" 5" Text="090"/>
+                            <TextBlock Grid.Column="6" Grid.Row=" 6" Text="091"/>
+                            <TextBlock Grid.Column="6" Grid.Row=" 7" Text="092"/>
+                            <TextBlock Grid.Column="6" Grid.Row=" 8" Text="093"/>
+                            <TextBlock Grid.Column="6" Grid.Row=" 9" Text="094"/>
+                            <TextBlock Grid.Column="6" Grid.Row="10" Text="095"/>
+                            <TextBlock Grid.Column="6" Grid.Row="11" Text="096"/>
+                            <TextBlock Grid.Column="6" Grid.Row="12" Text="097"/>
+                            <TextBlock Grid.Column="6" Grid.Row="13" Text="098"/>
+                            <TextBlock Grid.Column="6" Grid.Row="14" Text="099"/>
+                            <TextBlock Grid.Column="6" Grid.Row="15" Text="100"/>
+                            <TextBlock Grid.Column="6" Grid.Row="16" Text="101"/>
+                            <TextBlock Grid.Column="6" Grid.Row="17" Text="102"/>
+                            <TextBlock Grid.Column="6" Grid.Row="18" Text="103"/>
+                            <TextBlock Grid.Column="6" Grid.Row="19" Text="104"/>
+                            <TextBlock Grid.Column="6" Grid.Row="20" Text="105"/>
+                            <TextBlock Grid.Column="6" Grid.Row="21" Text="106"/>
+                            <TextBlock Grid.Column="6" Grid.Row="22" Text="107"/>
+                            <TextBlock Grid.Column="6" Grid.Row="23" Text="108"/>
+                            <TextBlock Grid.Column="6" Grid.Row="24" Text="109"/>
+                            <TextBlock Grid.Column="6" Grid.Row="25" Text="110"/>
+                            <TextBlock Grid.Column="6" Grid.Row="26" Text="111"/>
+                            <TextBlock Grid.Column="6" Grid.Row="27" Text="112"/>
+                            <StackPanel x:Name="DV_Ve_CellVolt1" Grid.Column="1" Grid.Row="0" >
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt2" Grid.Column="1" Grid.Row="1" >
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt3" Grid.Column="1" Grid.Row="2" >
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt4" Grid.Column="1" Grid.Row="3" >
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt5" Grid.Column="1" Grid.Row="4" >
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt6" Grid.Column="1" Grid.Row="5" >
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt7" Grid.Column="1" Grid.Row="6" >
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt8" Grid.Column="1" Grid.Row="7" >
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt9" Grid.Column="1" Grid.Row="8" >
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt10" Grid.Column="1" Grid.Row="9" >
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt11" Grid.Column="1" Grid.Row="10">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt12" Grid.Column="1" Grid.Row="11">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt13" Grid.Column="1" Grid.Row="12">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt14" Grid.Column="1" Grid.Row="13">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt15" Grid.Column="1" Grid.Row="14">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt16" Grid.Column="1" Grid.Row="15">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt17" Grid.Column="1" Grid.Row="16">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt18" Grid.Column="1" Grid.Row="17">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt19" Grid.Column="1" Grid.Row="18">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt20" Grid.Column="1" Grid.Row="19">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt21" Grid.Column="1" Grid.Row="20">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt22" Grid.Column="1" Grid.Row="21">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt23" Grid.Column="1" Grid.Row="22">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt24" Grid.Column="1" Grid.Row="23">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt25" Grid.Column="1" Grid.Row="24">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt26" Grid.Column="1" Grid.Row="25">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt27" Grid.Column="1" Grid.Row="26">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt28" Grid.Column="1" Grid.Row="27">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt29" Grid.Column="3" Grid.Row=" 0">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt30" Grid.Column="3" Grid.Row=" 1">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt31" Grid.Column="3" Grid.Row=" 2">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt32" Grid.Column="3" Grid.Row=" 3">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt33" Grid.Column="3" Grid.Row=" 4">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt34" Grid.Column="3" Grid.Row=" 5">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt35" Grid.Column="3" Grid.Row=" 6">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt36" Grid.Column="3" Grid.Row=" 7">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt37" Grid.Column="3" Grid.Row=" 8">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt38" Grid.Column="3" Grid.Row=" 9">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt39" Grid.Column="3" Grid.Row="10">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt40" Grid.Column="3" Grid.Row="11">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt41" Grid.Column="3" Grid.Row="12">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt42" Grid.Column="3" Grid.Row="13">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt43" Grid.Column="3" Grid.Row="14">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt44" Grid.Column="3" Grid.Row="15">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt45" Grid.Column="3" Grid.Row="16">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt46" Grid.Column="3" Grid.Row="17">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt47" Grid.Column="3" Grid.Row="18">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt48" Grid.Column="3" Grid.Row="19">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt49" Grid.Column="3" Grid.Row="20">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt50" Grid.Column="3" Grid.Row="21">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt51" Grid.Column="3" Grid.Row="22">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt52" Grid.Column="3" Grid.Row="23">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt53" Grid.Column="3" Grid.Row="24">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt54" Grid.Column="3" Grid.Row="25">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt55" Grid.Column="3" Grid.Row="26">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt56" Grid.Column="3" Grid.Row="27">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt57" Grid.Column="5" Grid.Row=" 0">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt58" Grid.Column="5" Grid.Row=" 1">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt59" Grid.Column="5" Grid.Row=" 2">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt60" Grid.Column="5" Grid.Row=" 3">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt61" Grid.Column="5" Grid.Row=" 4">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt62" Grid.Column="5" Grid.Row=" 5">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt63" Grid.Column="5" Grid.Row=" 6">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt64" Grid.Column="5" Grid.Row=" 7">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt65" Grid.Column="5" Grid.Row=" 8">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt66" Grid.Column="5" Grid.Row=" 9">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt67" Grid.Column="5" Grid.Row="10">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt68" Grid.Column="5" Grid.Row="11">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt69" Grid.Column="5" Grid.Row="12">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt70" Grid.Column="5" Grid.Row="13">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt71" Grid.Column="5" Grid.Row="14">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt72" Grid.Column="5" Grid.Row="15">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt73" Grid.Column="5" Grid.Row="16">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt74" Grid.Column="5" Grid.Row="17">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt75" Grid.Column="5" Grid.Row="18">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt76" Grid.Column="5" Grid.Row="19">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt77" Grid.Column="5" Grid.Row="20">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt78" Grid.Column="5" Grid.Row="21">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt79" Grid.Column="5" Grid.Row="22">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt80" Grid.Column="5" Grid.Row="23">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt81" Grid.Column="5" Grid.Row="24">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt82" Grid.Column="5" Grid.Row="25">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt83" Grid.Column="5" Grid.Row="26">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt84" Grid.Column="5" Grid.Row="27">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt85" Grid.Column="7" Grid.Row=" 0">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt86" Grid.Column="7" Grid.Row=" 1">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt87" Grid.Column="7" Grid.Row=" 2">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt88" Grid.Column="7" Grid.Row=" 3">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt89" Grid.Column="7" Grid.Row=" 4">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt90" Grid.Column="7" Grid.Row=" 5">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt91" Grid.Column="7" Grid.Row=" 6">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt92" Grid.Column="7" Grid.Row=" 7">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt93" Grid.Column="7" Grid.Row=" 8">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt94" Grid.Column="7" Grid.Row=" 9">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt95" Grid.Column="7" Grid.Row="10">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt96" Grid.Column="7" Grid.Row="11">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt97" Grid.Column="7" Grid.Row="12">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt98" Grid.Column="7" Grid.Row="13">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt99" Grid.Column="7" Grid.Row="14">
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt100" Grid.Column="7" Grid.Row="15">
+                                <TextBox/>
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt101" Grid.Column="7" Grid.Row="16">
+                                <TextBox/>
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt102" Grid.Column="7" Grid.Row="17">
+                                <TextBox/>
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt103" Grid.Column="7" Grid.Row="18">
+                                <TextBox/>
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt104" Grid.Column="7" Grid.Row="19">
+                                <TextBox/>
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt105" Grid.Column="7" Grid.Row="20">
+                                <TextBox/>
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt106" Grid.Column="7" Grid.Row="21">
+                                <TextBox/>
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt107" Grid.Column="7" Grid.Row="22">
+                                <TextBox/>
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt108" Grid.Column="7" Grid.Row="23">
+                                <TextBox/>
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt109" Grid.Column="7" Grid.Row="24">
+                                <TextBox/>
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt110" Grid.Column="7" Grid.Row="25">
+                                <TextBox/>
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt111" Grid.Column="7" Grid.Row="26">
+                                <TextBox/>
+                            </StackPanel>
+                            <StackPanel x:Name="DV_Ve_CellVolt112" Grid.Column="7" Grid.Row="27">
+                                <TextBox/>
+                            </StackPanel>
+
+                        </Grid>
+                    </GroupBox>
+
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="14*"/>
+                            <RowDefinition Height="8*"/>
+                        </Grid.RowDefinitions>
+                        <GroupBox  Grid.Row="0" Header="电池温度状态"  Background="#078A2BE2">
+                            <Grid>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="*"/>
+
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Grid.Row=" 0" Text="001"/>
+                                <TextBlock Grid.Column="0" Grid.Row=" 1" Text="002"/>
+                                <TextBlock Grid.Column="0" Grid.Row=" 2" Text="003"/>
+                                <TextBlock Grid.Column="0" Grid.Row=" 3" Text="004"/>
+                                <TextBlock Grid.Column="0" Grid.Row=" 4" Text="005"/>
+                                <TextBlock Grid.Column="0" Grid.Row=" 5" Text="006"/>
+                                <TextBlock Grid.Column="0" Grid.Row=" 6" Text="007"/>
+                                <TextBlock Grid.Column="0" Grid.Row=" 7" Text="008"/>
+                                <TextBlock Grid.Column="0" Grid.Row=" 8" Text="009"/>
+                                <TextBlock Grid.Column="0" Grid.Row=" 9" Text="010"/>
+                                <TextBlock Grid.Column="0" Grid.Row="10" Text="011"/>
+                                <TextBlock Grid.Column="0" Grid.Row="11" Text="012"/>
+                                <TextBlock Grid.Column="0" Grid.Row="12" Text="013"/>
+                                <TextBlock Grid.Column="0" Grid.Row="13" Text="014"/>
+                                <TextBlock Grid.Column="2" Grid.Row=" 0" Text="015"/>
+                                <TextBlock Grid.Column="2" Grid.Row=" 1" Text="016"/>
+                                <TextBlock Grid.Column="2" Grid.Row=" 2" Text="017"/>
+                                <TextBlock Grid.Column="2" Grid.Row=" 3" Text="018"/>
+                                <TextBlock Grid.Column="2" Grid.Row=" 4" Text="019"/>
+                                <TextBlock Grid.Column="2" Grid.Row=" 5" Text="020"/>
+                                <TextBlock Grid.Column="2" Grid.Row=" 6" Text="021"/>
+                                <TextBlock Grid.Column="2" Grid.Row=" 7" Text="022"/>
+                                <TextBlock Grid.Column="2" Grid.Row=" 8" Text="023"/>
+                                <TextBlock Grid.Column="2" Grid.Row=" 9" Text="024"/>
+                                <TextBlock Grid.Column="2" Grid.Row="10" Text="025"/>
+                                <TextBlock Grid.Column="2" Grid.Row="11" Text="026"/>
+                                <TextBlock Grid.Column="2" Grid.Row="12" Text="027"/>
+                                <TextBlock Grid.Column="2" Grid.Row="13" Text="028"/>
+                                <StackPanel x:Name="DV_Ve_CellTemp1"  Grid.Column="1" Grid.Row=" 0">
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_CellTemp2"  Grid.Column="1" Grid.Row=" 1">
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_CellTemp3"  Grid.Column="1" Grid.Row=" 2" >
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_CellTemp4"  Grid.Column="1" Grid.Row=" 3" >
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_CellTemp5"  Grid.Column="1" Grid.Row=" 4" >
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_CellTemp6"  Grid.Column="1" Grid.Row=" 5" >
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_CellTemp7"  Grid.Column="1" Grid.Row=" 6" >
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_CellTemp8"  Grid.Column="1" Grid.Row=" 7" >
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_CellTemp9"  Grid.Column="1" Grid.Row=" 8" >
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_CellTemp10" Grid.Column="1" Grid.Row=" 9" >
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_CellTemp11" Grid.Column="1" Grid.Row="10" >
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_CellTemp12" Grid.Column="1" Grid.Row="11" >
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_CellTemp13" Grid.Column="1" Grid.Row="12" >
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_CellTemp14" Grid.Column="1" Grid.Row="13" >
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_CellTemp15" Grid.Column="3" Grid.Row=" 0" >
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_CellTemp16" Grid.Column="3" Grid.Row=" 1" >
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_CellTemp17" Grid.Column="3" Grid.Row=" 2" >
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_CellTemp18" Grid.Column="3" Grid.Row=" 3" >
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_CellTemp19" Grid.Column="3" Grid.Row=" 4" >
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_CellTemp20" Grid.Column="3" Grid.Row=" 5" >
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_CellTemp21" Grid.Column="3" Grid.Row=" 6" >
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_CellTemp22" Grid.Column="3" Grid.Row=" 7" >
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_CellTemp23" Grid.Column="3" Grid.Row=" 8" >
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_CellTemp24" Grid.Column="3" Grid.Row=" 9" >
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_CellTemp25" Grid.Column="3" Grid.Row="10" >
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_CellTemp26" Grid.Column="3" Grid.Row="11" >
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_CellTemp27" Grid.Column="3" Grid.Row="12" >
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_CellTemp28" Grid.Column="3" Grid.Row="13" >
+                                    <TextBox />
+                                </StackPanel>
+
+                            </Grid>
+                        </GroupBox>
+                        <GroupBox  Grid.Row="1" Header="电池模组状态" Background="#07FFA500">
+                            <Grid>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+
+
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="*"/>
+
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Grid.Row=" 0" Text="001"/>
+                                <TextBlock Grid.Column="0" Grid.Row=" 1" Text="002"/>
+                                <TextBlock Grid.Column="0" Grid.Row=" 2" Text="003"/>
+                                <TextBlock Grid.Column="0" Grid.Row=" 3" Text="004"/>
+                                <TextBlock Grid.Column="0" Grid.Row=" 4" Text="005"/>
+                                <TextBlock Grid.Column="0" Grid.Row=" 5" Text="006"/>
+                                <TextBlock Grid.Column="0" Grid.Row=" 6" Text="007"/>
+                                <TextBlock Grid.Column="0" Grid.Row=" 7" Text="008"/>
+                                <TextBlock Grid.Column="2" Grid.Row=" 0" Text="009"/>
+                                <TextBlock Grid.Column="2" Grid.Row=" 1" Text="010"/>
+                                <TextBlock Grid.Column="2" Grid.Row=" 2" Text="011"/>
+                                <TextBlock Grid.Column="2" Grid.Row=" 3" Text="012"/>
+                                <TextBlock Grid.Column="2" Grid.Row=" 4" Text="013"/>
+                                <TextBlock Grid.Column="2" Grid.Row=" 5" Text="014"/>
+
+                                <StackPanel x:Name="DV_Ve_Module1"  Grid.Column="1" Grid.Row=" 0">
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_Module2"  Grid.Column="1" Grid.Row=" 1">
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_Module3"  Grid.Column="1" Grid.Row=" 2">
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_Module4"  Grid.Column="1" Grid.Row=" 3">
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_Module5"  Grid.Column="1" Grid.Row=" 4">
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_Module6"  Grid.Column="1" Grid.Row=" 5">
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_Module7"  Grid.Column="1" Grid.Row=" 6">
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_Module8"  Grid.Column="1" Grid.Row=" 7">
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_Module9"  Grid.Column="3" Grid.Row=" 0">
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_Module10" Grid.Column="3" Grid.Row=" 1">
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_Module11" Grid.Column="3" Grid.Row=" 2">
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_Module12" Grid.Column="3" Grid.Row=" 3">
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_Module13" Grid.Column="3" Grid.Row=" 4">
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel x:Name="DV_Ve_Module14" Grid.Column="3" Grid.Row=" 5">
+                                    <TextBox />
+                                </StackPanel>
+                            </Grid>
+                        </GroupBox>
+                    </Grid>
+                    <GroupBox Header="故障状态显示" Grid.Column="2" Background="#03008000">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Grid.Row="0" Text="FID_INSTANT_DISCONNECTION"/>
+                            <TextBlock Grid.Column="0" Grid.Row="1" Text="FID_DO_NOT_CONNECT "/>
+                            <TextBlock Grid.Column="0" Grid.Row="2" Text="FID_DISCHARGE_POWERLIMIT"/>
+                            <TextBlock Grid.Column="0" Grid.Row="3" Text="FID_CHARGE_POWERLIMIT"/>
+                            <TextBlock Grid.Column="0" Grid.Row="4" Text="FID_CELL_VOLTAGE_UNAVAIL"/>
+                            <TextBlock Grid.Column="0" Grid.Row="5" Text="FID_CUR_SENS_UNAVAIL"/>
+                            <TextBlock Grid.Column="0" Grid.Row="6" Text="FID_NO_CIDD"/>
+                            <TextBlock Grid.Column="0" Grid.Row="7" Text="FID_UDC_MODE"/>
+                            <TextBlock Grid.Column="0" Grid.Row="8" Text="FID_NO_BALANCING"/>
+                            <TextBlock Grid.Column="0" Grid.Row="9" Text="FID_SYSTEM_ISOLATION_TEST"/>
+                            <TextBlock Grid.Column="0" Grid.Row="10" Text="FID_CRASH_EVENT"/>
+                            <TextBlock Grid.Column="0" Grid.Row="11" Text="FID_POS_STUCKED_CLOSED_TEST"/>
+                            <TextBlock Grid.Column="0" Grid.Row="12" Text="FID_NEG_STUCKED_CLOSED_TEST"/>
+                            <TextBlock Grid.Column="0" Grid.Row="13" Text="FID_NO_CHARGING"/>
+                            <TextBlock Grid.Column="0" Grid.Row="14" Text="FID_INHIBIT_CHILLER_COOLING"/>
+                            <TextBlock Grid.Column="0" Grid.Row="15" Text="FID_INHIBIT_PASSIVE_COOLING"/>
+                            <TextBlock Grid.Column="0" Grid.Row="16" Text="FID_NO_CONNECTION"/>
+                            <TextBlock Grid.Column="0" Grid.Row="17" Text="FID_STOP_SAFELY"/>
+                            <TextBlock Grid.Column="0" Grid.Row="18" Text="FID_NO_DISCHARGE_ALLOWED"/>
+                            <TextBlock Grid.Column="0" Grid.Row="19" Text="FID_NO_RESTART_MESSAGE"/>
+                            <TextBlock Grid.Column="0" Grid.Row="20" Text="INDICATION_SERVICE_REQUIRED"/>
+                            <TextBlock Grid.Column="0" Grid.Row="21" Text="FID_VALVE_STUCK"/>
+                            <TextBlock Grid.Column="0" Grid.Row="22" Text="FID_VALVE_STUCK_UNCONFIRMED"/>
+                            <TextBlock Grid.Column="0" Grid.Row="23" Text="FID_COOLTEMP_RAT_UNCONF"/>
+                            <TextBlock Grid.Column="0" Grid.Row="24" Text="FID_CVTN_UNSTABLE"/>
+                            <TextBlock Grid.Column="2" Grid.Row=" 0" Text="FID_CELL_VOLT_UNSTABLE"/>
+                            <TextBlock Grid.Column="2" Grid.Row=" 1" Text="FID_BATT_TEMP_UNSTABLE"/>
+                            <TextBlock Grid.Column="2" Grid.Row=" 2" Text="FID_COOL_TEMP_UNSTABLE"/>
+                            <TextBlock Grid.Column="2" Grid.Row=" 3" Text="FID_BATT_CURR_UNSTABLE"/>
+                            <TextBlock Grid.Column="2" Grid.Row=" 4" Text="FID_COOL_FLOW_UNSTABLE"/>
+                            <TextBlock Grid.Column="2" Grid.Row=" 5" Text="FID_COOL_TEMP_FAILURE"/>
+                            <TextBlock Grid.Column="2" Grid.Row=" 6" Text="FID_ECM_SIGNAL_FAILURE"/>
+                            <TextBlock Grid.Column="2" Grid.Row=" 7" Text="FID_HVIL_OPEN_EM"/>
+                            <TextBlock Grid.Column="2" Grid.Row=" 8" Text="FID_MOD1_TEMP_SEN_UNCONF"/>
+                            <TextBlock Grid.Column="2" Grid.Row=" 9" Text="FID_MOD2_TEMP_SEN_UNCONF"/>
+                            <TextBlock Grid.Column="2" Grid.Row="10" Text="FID_MOD3_TEMP_SEN_UNCONF"/>
+                            <TextBlock Grid.Column="2" Grid.Row="11" Text="FID_MOD4_TEMP_SEN_UNCONF"/>
+                            <TextBlock Grid.Column="2" Grid.Row="12" Text="FID_MOD5_TEMP_SEN_UNCONF"/>
+                            <TextBlock Grid.Column="2" Grid.Row="13" Text="FID_MOD6_TEMP_SEN_UNCONF"/>
+                            <TextBlock Grid.Column="2" Grid.Row="14" Text="FID_MOD7_TEMP_SEN_UNCONF"/>
+                            <TextBlock Grid.Column="2" Grid.Row="15" Text="FID_MOD8_TEMP_SEN_UNCONF"/>
+                            <TextBlock Grid.Column="2" Grid.Row="16" Text="FID_CELL_CRITHIGHVOLT_DET"/>
+                            <TextBlock Grid.Column="2" Grid.Row="17" Text="FID_INHIBIT_SELFTEST"/>
+                            <TextBlock Grid.Column="2" Grid.Row="18" Text="FID_CUR_SENS_INTERNAL"/>
+                            <TextBlock Grid.Column="2" Grid.Row="19" Text="FID_LOST_CUR_SENS"/>
+                            <TextBlock Grid.Column="2" Grid.Row="20" Text="FID_COOL_PERF_UNCONFIRMED"/>
+                            <TextBlock Grid.Column="2" Grid.Row="21" Text="FID_MPM_CVTN_DATA"/>
+                            <TextBlock Grid.Column="2" Grid.Row="22" Text="FID_MPM_CUR_DATA"/>
+                            <TextBlock Grid.Column="2" Grid.Row="23" Text="FID_BCM_SIGNAL_FAILURE"/>
+                            <StackPanel x:Name= "FID_INSTANT_DISCONNECTION"  Grid.Column="1" Grid.Row=" 0">
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_ 0"   IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center" Content="故障" GroupName="FID_ 0"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_DO_NOT_CONNECT"  Grid.Column="1" Grid.Row=" 1">
+                                <RadioButton VerticalAlignment="Center"  Content="正常" GroupName="FID_ 1"   IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}"  />
+                                <RadioButton VerticalAlignment="Center" Content="故障" GroupName="FID_ 1" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_DISCHARGE_POWERLIMIT"  Grid.Column="1" Grid.Row=" 2" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_ 2"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_ 2" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_CHARGE_POWERLIMIT"  Grid.Column="1" Grid.Row=" 3" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_ 3"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_ 3" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_CELL_VOLTAGE_UNAVAIL"  Grid.Column="1" Grid.Row=" 4" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_ 4"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_ 4" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_CUR_SENS_UNAVAIL"  Grid.Column="1" Grid.Row=" 5" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_ 5"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_ 5" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_NO_CIDD"  Grid.Column="1" Grid.Row=" 6" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_ 6"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_ 6" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_UDC_MODE"  Grid.Column="1" Grid.Row=" 7" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_ 7"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_ 7" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_NO_BALANCING"  Grid.Column="1" Grid.Row=" 8" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_ 8"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_ 8" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_SYSTEM_ISOLATION_TEST"  Grid.Column="1" Grid.Row=" 9" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_ 9"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_ 9" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_CRASH_EVENT"  Grid.Column="1" Grid.Row="10" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_10"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_10" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_POS_STUCKED_CLOSED_TEST"  Grid.Column="1" Grid.Row="11" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_11"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_11" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_NEG_STUCKED_CLOSED_TEST"  Grid.Column="1" Grid.Row="12" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_12"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_12" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_NO_CHARGING"  Grid.Column="1" Grid.Row="13" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_13"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_13" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_INHIBIT_CHILLER_COOLING"  Grid.Column="1" Grid.Row="14" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_14"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_14" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_INHIBIT_PASSIVE_COOLING"  Grid.Column="1" Grid.Row="15" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_15"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_15" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_NO_CONNECTION"  Grid.Column="1" Grid.Row="16" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_16"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_16" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_STOP_SAFELY"  Grid.Column="1" Grid.Row="17" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_17"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_17" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_NO_DISCHARGE_ALLOWED"  Grid.Column="1" Grid.Row="18" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_18"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_18" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_NO_RESTART_MESSAGE"  Grid.Column="1" Grid.Row="19" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_19"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_19" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "INDICATION_SERVICE_REQUIRED" Grid.Column="1" Grid.Row="20">
+                                <!--<RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_20"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_20" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />-->
+                                <TextBox Width="90" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_VALVE_STUCK"  Grid.Column="1" Grid.Row="21" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_21"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_21" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_VALVE_STUCK_UNCONFIRMED"  Grid.Column="1" Grid.Row="22" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_22"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_22" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_COOLTEMP_RAT_UNCONF"  Grid.Column="1" Grid.Row="23" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_23"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_23" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_CVTN_UNSTABLE"  Grid.Column="1" Grid.Row="24" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_24"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_24" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_CELL_VOLT_UNSTABLE"  Grid.Column="3" Grid.Row=" 0" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_25"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_25" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_BATT_TEMP_UNSTABLE"  Grid.Column="3" Grid.Row=" 1" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_26"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_26" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_COOL_TEMP_UNSTABLE"  Grid.Column="3" Grid.Row=" 2" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_27"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_27" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_BATT_CURR_UNSTABLE"  Grid.Column="3" Grid.Row=" 3" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_28"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_28" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_COOL_FLOW_UNSTABLE"  Grid.Column="3" Grid.Row=" 4" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_29"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_29" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_COOL_TEMP_FAILURE"  Grid.Column="3" Grid.Row=" 5" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_30"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_30" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_ECM_SIGNAL_FAILURE"  Grid.Column="3" Grid.Row=" 6" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_31"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_31" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_HVIL_OPEN_EM"  Grid.Column="3" Grid.Row=" 7" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_32"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_32" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_MOD1_TEMP_SEN_UNCONF"  Grid.Column="3" Grid.Row=" 8" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_33"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_33" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_MOD2_TEMP_SEN_UNCONF"  Grid.Column="3" Grid.Row=" 9" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_34"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_34" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_MOD3_TEMP_SEN_UNCONF"  Grid.Column="3" Grid.Row="10" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_35"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_35" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_MOD4_TEMP_SEN_UNCONF"  Grid.Column="3" Grid.Row="11" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_36"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_36" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_MOD5_TEMP_SEN_UNCONF"  Grid.Column="3" Grid.Row="12" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_37"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_37" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_MOD6_TEMP_SEN_UNCONF"  Grid.Column="3" Grid.Row="13" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_38"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_38" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_MOD7_TEMP_SEN_UNCONF"  Grid.Column="3" Grid.Row="14" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_39"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_39" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_MOD8_TEMP_SEN_UNCONF"  Grid.Column="3" Grid.Row="15" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_40"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_40" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_CELL_CRITHIGHVOLT_DET"  Grid.Column="3" Grid.Row="16" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_41"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_41" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_INHIBIT_SELFTEST"  Grid.Column="3" Grid.Row="17" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_42"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_42" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_CUR_SENS_INTERNAL"  Grid.Column="3" Grid.Row="18" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_43"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_43" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_LOST_CUR_SENS"  Grid.Column="3" Grid.Row="19" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_44"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_44" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_COOL_PERF_UNCONFIRMED"  Grid.Column="3" Grid.Row="20" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_45"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_45" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_MPM_CVTN_DATA"  Grid.Column="3" Grid.Row="21" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_46"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_46" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_MPM_CUR_DATA"  Grid.Column="3" Grid.Row="22" >
+                                <!--<RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_47"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_47" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />-->
+                                <TextBox Width="90" />
+                            </StackPanel>
+                            <StackPanel x:Name= "FID_BCM_SIGNAL_FAILURE"  Grid.Column="3" Grid.Row="23" >
+                                <RadioButton VerticalAlignment="Center" Content="正常" GroupName="FID_48"  IsChecked="{Binding Data,Converter={StaticResource  ZeroAsTrueConverter}}" />
+                                <RadioButton VerticalAlignment="Center"  Content="故障" GroupName="FID_48" IsChecked="{Binding Data,Converter={StaticResource  ZeroAsFalseConverter}}" />
+                            </StackPanel>
+                            <GroupBox Grid.Column="0" Grid.Row="25" Grid.RowSpan="3" Grid.ColumnSpan="6" Header="故障码">
+                                <TextBox x:Name="FaultCodeInfo" VerticalAlignment="Stretch" TextWrapping="Wrap" TextAlignment="Left" VerticalScrollBarVisibility="Visible" />
+                            </GroupBox>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+        </TabControl>
+        <Grid Grid.Row="1" Panel.ZIndex="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="756"/>
+                <ColumnDefinition Width="509*" />
+
+            </Grid.ColumnDefinitions>
+            <GroupBox Grid.Column="0" Header="数据存储">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="文件夹" Width="60" TextAlignment="Right"/>
+                        <TextBox  Width="342" Margin="1" BorderBrush="#FFC7D2DD" VerticalAlignment="Center"   Height="26" IsReadOnly="True" Text="{Binding FilePath}" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                        <Button Content="选择" x:Name="btnChoose"  Margin="15,1" Width="50" Background="#FDB603" BorderBrush="#FFD49A08" Click="Button_Click" IsEnabled="{Binding ElementName=btnStartRecord,Path=IsEnabled}"  />
+                        <TextBlock Text="文件名" Margin=" 50,0,3,0"/>
+                        <TextBox Width="100" Margin="1" BorderBrush="#FFC7D2DD" VerticalAlignment="Center"   Height="26" Text="{Binding FileName}" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="{Binding ElementName=btnStartRecord,Path=IsEnabled}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal">
+                        <TextBlock Text="记录行数" Width="60"  TextAlignment="Right"/>
+                        <TextBox Width="100" Margin="1" BorderBrush="#FFC7D2DD" VerticalAlignment="Center"   Height="26" Text="{Binding LineLimit}" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="{Binding ElementName=btnStartRecord,Path=IsEnabled}" />
+                        <TextBlock Text="周期(ms)" Width="134" TextAlignment="Right" />
+                        <TextBox Width="100" Margin="1" BorderBrush="#FFC7D2DD" VerticalAlignment="Center"   Height="26" Text="{Binding Interval}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center" IsEnabled="{Binding ElementName=btnStartRecord,Path=IsEnabled}" />
+                        <Button Content="应用" x:Name="btnApply" Margin="15,1" Width="50" Background="#FDB603" BorderBrush="#FFD49A08" Click="Button_Click_1" IsEnabled="{Binding ElementName=btnStartRecord,Path=IsEnabled}" />
+                        <Button Content="开始保存" x:Name="btnStartRecord" Margin="50,1,15,1" Width="80" Background="#FDB603" BorderBrush="#FFD49A08" Click="StartRecord"/>
+                        <Button Content="停止保存" x:Name="btnStopRecord" Margin="15,1" Width="80" Background="#FDB603" BorderBrush="#FFD49A08" Click="StopRecord" />
+                    </StackPanel>
+
+                </Grid>
+
+            </GroupBox>
+            <GroupBox Grid.Column="1" Header="系统配置">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <StackPanel Margin="50,0">
+                        <StackPanel.Resources>
+                            <Style x:Key="style_btnStart" TargetType="{x:Type Button}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <StackPanel Orientation="Horizontal" >
+                                                <Image Name="img" Source="pack://application:,,,/images/play01.png" />
+                                            </StackPanel>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Source" Value="pack://application:,,,/images/play02.png" TargetName="img"/>
+                                                </Trigger>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter Property="Source" Value="pack://application:,,,/images/play03.png" TargetName="img"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+
+                        </StackPanel.Resources>
+                        <Button x:Name="btnSysCtrlStart" Width="48" Height="48" Style="{StaticResource style_btnStart}" Click="btnSysCtrlStart_Click"/>
+
+                        <TextBlock Text="启动" TextAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <StackPanel.Resources>
+                            <Style x:Key="style_btnStop" TargetType="{x:Type Button}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <StackPanel Orientation="Horizontal" >
+                                                <Image Name="imgStop" Source="pack://application:,,,/images/stop01.png" />
+                                            </StackPanel>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Source" Value="pack://application:,,,/images/stop02.png" TargetName="imgStop"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+
+                        </StackPanel.Resources>
+                        <Button x:Name="btnSysCtrlStop" Width="48" Height="48" Style="{StaticResource style_btnStop}" Click="btnSysCtrlStop_Click"/>
+
+                        <TextBlock Text="停止" TextAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel  Margin="50,0">
+                        <StackPanel.Resources>
+                            <Style x:Key="style_btnSetting" TargetType="{x:Type Button}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <StackPanel Orientation="Horizontal" >
+                                                <Image Name="ImgBtnBg3" Source="pack://application:,,,/images/settings01.png" />
+                                            </StackPanel>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Source" Value="pack://application:,,,/images/settings02.png" TargetName="ImgBtnBg3"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </StackPanel.Resources>
+                        <Button x:Name="btnSettings" Width="48" Height="48" Style="{StaticResource style_btnSetting}" Click="btnSettings_Click"/>
+                        <TextBlock Text="配置" TextAlignment="Center"/>
+                    </StackPanel>
+
+
+
+
+
+                </StackPanel>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</Window>

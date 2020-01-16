@@ -1,0 +1,87 @@
+﻿<Window x:Class="PMA_Project.View.Settings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="系统配置" Height="480" Width="420" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow" ResizeMode="NoResize" Loaded="Window_Loaded">
+    <Grid Margin="10"  >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="1.5*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="1.5*"/>
+            <RowDefinition Height="1.5*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="接口卡类型："/>
+            <ComboBox x:Name ="cbxDevType"  Width="150" Background="Transparent"   SelectionChanged="cbxDevType_SelectionChanged">
+                <ComboBoxItem>Vector VN1630</ComboBoxItem>
+                <ComboBoxItem>Vector VN1640A</ComboBoxItem>
+                <ComboBoxItem>PEAK PCAN</ComboBoxItem>
+                <ComboBoxItem>ValueCAN</ComboBoxItem>
+                <ComboBoxItem>周立功白CAN盒</ComboBoxItem>
+            </ComboBox>
+        </StackPanel>
+        <GroupBox Header="模式选择" Grid.Row="1" Margin="0,5">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <RadioButton GroupName="mode1" Content="通用模式" IsChecked="True"/>
+                <RadioButton GroupName="mode1" Content="诊断模式" IsChecked="false" Margin="5,0" IsEnabled="False" />
+            </StackPanel>
+        </GroupBox>
+        <CheckBox x:Name="chxChannel01" Grid.Row="2" Content="通道1" Margin="0,0,0,5" Checked="Channel_Checked" Unchecked="Channel_Checked"/>
+        <Border Grid.Row="3" Grid.RowSpan="2" BorderBrush="#FFD5DFE5" BorderThickness="1" CornerRadius="3"/>
+        <DockPanel x:Name="dpChannel01" Grid.Row="3" Grid.RowSpan="2" IsEnabled="False">
+            <StackPanel DockPanel.Dock="Top"  Grid.Row="6" Orientation="Horizontal" VerticalAlignment="Center" Margin="5">
+                <TextBlock Text="波特率" />
+                <TextBox x:Name="tbxBauRat01" Width="150" Margin="3,0" Text="500" IsEnabled="{Binding Path=IsEnabled,RelativeSource={  RelativeSource  Mode=FindAncestor, AncestorType={x:Type DockPanel}, AncestorLevel=2 }}"/>
+                <TextBlock Text="kbps"/>
+            </StackPanel>
+            <StackPanel Grid.Row="7" Orientation="Horizontal" VerticalAlignment="Center"  Margin="5">
+                <TextBlock Text="DBC文件" />
+                <TextBox  x:Name="tbDBCFilePath01" Width="250" Margin="3,0" IsEnabled="{Binding Path=IsEnabled,RelativeSource={  RelativeSource  Mode=FindAncestor, AncestorType={x:Type DockPanel}, AncestorLevel=2 }}" />
+                <Button  x:Name="btnOpen01"  Content="浏览" Margin="5,0" Width="50" Background="Transparent" IsEnabled="{Binding Path=IsEnabled,RelativeSource={  RelativeSource  Mode=FindAncestor, AncestorType={x:Type DockPanel}, AncestorLevel=2 }}"
+                         BorderBrush="#FFD49A08" Click="btnOpen_Click" />
+            </StackPanel>
+        </DockPanel>
+        <CheckBox x:Name="chxChannel02" Grid.Row="5" Content="通道2" Margin="0,5" IsEnabled="true"  Checked="Channel_Checked" Unchecked="Channel_Checked"/>
+        <Border Grid.Row="6" Grid.RowSpan="2" BorderBrush="#FFD5DFE5" BorderThickness="1" CornerRadius="3"/>
+        <DockPanel x:Name="dpChannel02" Grid.Row="6" Grid.RowSpan="2" IsEnabled="False">
+            <StackPanel DockPanel.Dock="Top"  Grid.Row="6" Orientation="Horizontal" VerticalAlignment="Center" Margin="5">
+                <TextBlock Text="波特率" />
+                <TextBox x:Name="tbxBauRat02" Width="150" Margin="3,0" Text="500" IsEnabled="{Binding Path=IsEnabled,RelativeSource={  RelativeSource  Mode=FindAncestor, AncestorType={x:Type DockPanel}, AncestorLevel=2 }}"/>
+                <TextBlock Text="kbps"/>
+            </StackPanel>
+            <StackPanel Grid.Row="7" Orientation="Horizontal" VerticalAlignment="Center"  Margin="5">
+                <TextBlock Text="DBC文件" />
+                <TextBox  x:Name="tbDBCFilePath02" Width="250" Margin="3,0" IsEnabled="{Binding Path=IsEnabled,RelativeSource={  RelativeSource  Mode=FindAncestor, AncestorType={x:Type DockPanel}, AncestorLevel=2 }}" />
+                <Button  x:Name="btnOpen02"  Content="浏览" Margin="5,0" Width="50" Background="Transparent" IsEnabled="{Binding Path=IsEnabled,RelativeSource={  RelativeSource  Mode=FindAncestor, AncestorType={x:Type DockPanel}, AncestorLevel=2 }}"
+                         BorderBrush="#FFD49A08" Click="btnOpen_Click" />
+            </StackPanel>
+        </DockPanel>
+        
+        <GroupBox Header="诊断通道选择" Grid.Row="8" IsEnabled="false" Foreground="Gray" Margin="0,5" >
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <CheckBox  Content="通道1" IsChecked="False"/>
+                <CheckBox  Content="通道2" IsChecked="false" Margin="5,0" IsEnabled="True" />
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="诊断物理和功能地址设置" Grid.Row="9" IsEnabled="False" Foreground="Gray" >
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="物理ID：0x" />
+                <TextBox Width="50" Margin="3,0"/>
+                <TextBlock Text="功能ID：0x" Margin="10,0,0,0" />
+                <TextBox Width="50" Margin="3,0"/>
+                <TextBlock Text="接收ID：0x" Margin="10,0,0,0"/>
+                <TextBox Width="50" Margin="3,0"/>
+            </StackPanel>
+        </GroupBox>
+        <StackPanel Grid.Row="10" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" >
+            <Button x:Name="btnOK" Content="确认" Margin="5,0" Width="50" Background="Transparent" BorderBrush="#FFD49A08" Click="btnOK_Click" />
+            <Button x:Name="btnCancel" Content="取消" Margin="5,0" Width="50" Background="Transparent" BorderBrush="#FFD49A08" Click="btnCancel_Click"  />
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,155 @@
+﻿<Window x:Class="PMA_Project.View.Send"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:PMA_Project.Other"
+        Title="Send" Height="600" Width="650" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" Closing="Window_Closing"  >
+    <Window.Resources>
+        <!--<local:FrmtypeConverter x:Key="FrmtypeConverter"/>-->
+        <Style TargetType="{x:Type DataGrid}">
+            <Setter Property="AlternatingRowBackground" Value="#FFFFEFDE"/>
+            <Setter Property="AllowDrop" Value="True"/>
+            <Setter Property="AlternationCount" Value="2"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="CanUserDeleteRows" Value="False"/>
+            <Setter Property="RowHeaderWidth" Value="28"/>
+            <Setter Property="VerticalGridLinesBrush" Value="{x:Null}"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#FF688CAF"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CanUserSortColumns" Value="False"/>
+
+        </Style>
+    </Window.Resources>
+    <Grid Margin="3">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="28"/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <Button x:Name="btnNew" Content="新建" Margin="5,0" Width="50" Background="Transparent" BorderBrush="#FFD49A08" Click="Button_Click" Visibility="Collapsed"/>
+            <Button x:Name="btnAdd" Content="添加" Margin="5,0" Width="50" Background="Transparent" BorderBrush="#FFD49A08" Click="Button_Click"  />
+            <Button x:Name="btnDel" Content="删除" Margin="5,0" Width="50" Background="Transparent" BorderBrush="#FFD49A08" Click="Button_Click" IsEnabled="False" />
+            <TextBlock x:Name="sendErrorMessage" Text="" Foreground="Red" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20"/>
+        </StackPanel>
+
+        <DataGrid x:Name="dgList" Grid.Row="1" Margin="0,3" RowHeight="23" ItemsSource="{Binding }" 
+                  SelectionChanged="dgList_SelectionChanged"  CellEditEnding="dgList_CellEditEnding">
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="auto"  Header="序号" IsReadOnly="True" Binding="{Binding objFrameDataModel.Index, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Width="auto" Header="ID（Hex)" IsReadOnly="True" Binding="{Binding objFrameDataModel.Id, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }"/>
+                <DataGridTextColumn Width="*" Header="报文名称" IsReadOnly="True" Binding="{Binding objFrameDataModel.MsgNam, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridComboBoxColumn Width="70" Header="帧类型" x:Name="frametypeColumn" SelectedItemBinding="{Binding Path=objFrameDataModel.FrameType}"
+                 >
+                    <DataGridComboBoxColumn.ElementStyle>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="ItemsSource" Value="{Binding Path=LstFrmTyp}" />
+                            <Setter Property="SelectedValue" Value="{Binding Path=objFrameDataModel.FrameType, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+                        </Style>
+                    </DataGridComboBoxColumn.ElementStyle>
+                    <DataGridComboBoxColumn.EditingElementStyle>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="SelectedValue" Value="{Binding Path=objFrameDataModel.FrameType,  Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+                            <Setter Property="ItemsSource" Value="{Binding Path=LstFrmTyp}" />
+                        </Style>
+                    </DataGridComboBoxColumn.EditingElementStyle>
+
+                </DataGridComboBoxColumn>
+                <DataGridComboBoxColumn Width="50" x:Name="DLCColumn" Header="DLC"  SelectedItemBinding="{Binding objFrameDataModel.DLC, Mode=TwoWay, UpdateSourceTrigger=LostFocus}">
+                    <DataGridComboBoxColumn.ElementStyle>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="ItemsSource" Value="{Binding Path=LstFrmDLC}" />
+                            <Setter Property="SelectedValue" Value="{Binding Path=objFrameDataModel.DLC, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+                        </Style>
+                    </DataGridComboBoxColumn.ElementStyle>
+                    <DataGridComboBoxColumn.EditingElementStyle>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="SelectedValue" Value="{Binding Path=objFrameDataModel.DLC,  Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+                            <Setter Property="ItemsSource" Value="{Binding Path=LstFrmDLC}" />
+                        </Style>
+                    </DataGridComboBoxColumn.EditingElementStyle>
+                </DataGridComboBoxColumn>
+
+                <DataGridComboBoxColumn Width="70" x:Name="channelColumn" Header="通道"  SelectedItemBinding="{Binding objFrameDataModel.ChannelName, Mode=TwoWay, UpdateSourceTrigger=LostFocus}">
+                    <DataGridComboBoxColumn.ElementStyle>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="ItemsSource" Value="{Binding Path=LstFrmChannelSel}" />
+                            <Setter Property="SelectedValue" Value="{Binding Path=objFrameDataModel.ChannelName, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+                        </Style>
+                    </DataGridComboBoxColumn.ElementStyle>
+                    <DataGridComboBoxColumn.EditingElementStyle>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="SelectedValue" Value="{Binding Path=objFrameDataModel.ChannelName,  Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+                            <Setter Property="ItemsSource" Value="{Binding Path=LstFrmChannelSel}" />
+                        </Style>
+                    </DataGridComboBoxColumn.EditingElementStyle>
+                </DataGridComboBoxColumn>
+                <DataGridComboBoxColumn Width="70" Header="触发方式" x:Name="triggerTypeColumn" SelectedItemBinding="{Binding objFrameDataModel.TriggerType, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"  >
+                    <DataGridComboBoxColumn.ElementStyle>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="ItemsSource" Value="{Binding Path=LstTriggerType}" />
+                            <Setter Property="SelectedValue" Value="{Binding Path=objFrameDataModel.TriggerType, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+                        </Style>
+                    </DataGridComboBoxColumn.ElementStyle>
+                    <DataGridComboBoxColumn.EditingElementStyle>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="SelectedValue" Value="{Binding Path=objFrameDataModel.TriggerType,  Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+                            <Setter Property="ItemsSource" Value="{Binding Path=LstTriggerType}" />
+
+                        </Style>
+                    </DataGridComboBoxColumn.EditingElementStyle>
+                </DataGridComboBoxColumn>
+                <DataGridTextColumn Width="auto" x:Name="cycleColumn" Header="周期时间(ms)"  Binding="{Binding objFrameDataModel.CycleTime, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+                <DataGridHyperlinkColumn x:Name="sendColumn" Width="auto" Header="发送"  Binding="{Binding objFrameDataModel.SndNam,Mode=TwoWay, UpdateSourceTrigger=LostFocus}">
+                    <DataGridHyperlinkColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <EventSetter Event="Hyperlink.Click" HandledEventsToo="False" Handler="Hyperlink_Click"></EventSetter>
+                            <!--<EventSetter Event="MouseLeftButtonDown" Handler="url"></EventSetter>-->
+                        </Style>
+                    </DataGridHyperlinkColumn.ElementStyle>
+
+
+
+                </DataGridHyperlinkColumn>
+
+                <!--<DataGridComboBoxColumn Header="Category" x:Name="categoryColumn"    
+                  DisplayMemberPath="Frametype" SelectedValuePath="Frametype" 
+               SelectedValueBinding="{Binding Path=Frametype, Converter={StaticResource FrmtypeConverter}}"></DataGridComboBoxColumn>-->
+
+
+
+
+            </DataGrid.Columns>
+        </DataGrid>
+        <TabControl Grid.Row="2">
+            <TabItem Header="Signal">
+                <DataGrid x:Name="dgSignal"  CellEditEnding="dgSignal_CellEditEnding" ItemsSource="{Binding}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Width="2*" Header="名称"  Binding="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" />
+                        <DataGridTextColumn x:Name="colRawData" Width="70" Header="原始数值"  Binding="{Binding RawData, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="Blue" />
+                        <DataGridTextColumn x:Name="colPhysical" Width="70" Header="物理数值"  Binding="{Binding PhysicalData, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="Blue" />
+                        <DataGridTextColumn Width="70" Header="起始位" Binding="{Binding BeginBit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
+                        <DataGridTextColumn Width="*" Header="单位"  Binding="{Binding StrUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
+                        <DataGridTextColumn Width="40" Header="长度" Binding="{Binding Length, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+            <TabItem Header="Raw Data">
+                <DataGrid x:Name="dgRawData" ItemsSource="{Binding}" CellEditEnding="dgRawData_CellEditEnding" >
+                    <DataGrid.Columns>
+                        <DataGridTextColumn x:Name="colRawData0" Width="70" Header="0(H)"  Binding="{Binding ZeroByte, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn x:Name="colRawData1" Width="70" Header="1(H)" Binding="{Binding FirstByte, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn x:Name="colRawData2" Width="40" Header="2(H)" Binding="{Binding SecondByte, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn x:Name="colRawData3" Width="70" Header="3(H)"  Binding="{Binding ThreeByte, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn x:Name="colRawData4" Width="70" Header="4(H)"  Binding="{Binding FourByte, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn x:Name="colRawData5" Width="70" Header="5(H)"  Binding="{Binding FiveByte, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn x:Name="colRawData6" Width="70" Header="6(H)" Binding="{Binding SixByte, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn x:Name="colRawData7" Width="70" Header="7(H)" Binding="{Binding SevenByte, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

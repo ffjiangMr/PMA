@@ -1,0 +1,863 @@
+VERSION ""
+
+
+NS_ : 
+	NS_DESC_
+	CM_
+	BA_DEF_
+	BA_
+	VAL_
+	CAT_DEF_
+	CAT_
+	FILTER
+	BA_DEF_DEF_
+	EV_DATA_
+	ENVVAR_DATA_
+	SGTYPE_
+	SGTYPE_VAL_
+	BA_DEF_SGTYPE_
+	BA_SGTYPE_
+	SIG_TYPE_REF_
+	VAL_TABLE_
+	SIG_GROUP_
+	SIG_VALTYPE_
+	SIGTYPE_VALTYPE_
+	BO_TX_BU_
+	BA_DEF_REL_
+	BA_REL_
+	BA_DEF_DEF_REL_
+	BU_SG_REL_
+	BU_EV_REL_
+	BU_BO_REL_
+	SG_MUL_VAL_
+
+BS_:
+
+BU_: BMU
+VAL_TABLE_ AVtSig_FaultNormal 1 "Fault" 0 "Normal" ;
+VAL_TABLE_ DV_CAN_RlyCtrlAllow 10 "All Rly can be controled" 9 "Reserved" 8 "Reserved" 7 "DCH_NegRly_CtrlAllow" 6 "DCH_PosRly_CtrlAllow" 5 "DCH_PreRly_CtrlAllow" 4 "FCH_PosRly_CtrlAllow" 3 "FCH_PreRly_CtrlAllow" 2 "OBC_NegRly_CtrlAllow" 1 "OBC_PosRly_CtrlAllow" 0 "OBC_PreRly_CtrlAllow" ;
+VAL_TABLE_ FID_State 1 "fault" 0 "normal" ;
+VAL_TABLE_ Lin_State 1 "communication" 0 "Not  communication" ;
+VAL_TABLE_ IsoRes_state 3 "Reserve" 2 "Lv2,  R<100次/V" 1 "Lv1, 100次/V <R <500次/V" 0 "OK,   >500次/V" ;
+VAL_TABLE_ Crash_State 1 "Crash Happen" 0 "OK,NO Crash" ;
+VAL_TABLE_ RelayCtrl_req 1 "allow" 0 "Not allow" ;
+VAL_TABLE_ SOC_Calibration 1 "Allow" 0 "Not Allow" ;
+VAL_TABLE_ ISO_Ctrl_state 1 "open,not ISO Monitor" 0 "closed,ISO Monitor working(init)" ;
+VAL_TABLE_ DV_Ctrl_state 1 "Allow" 0 "Not Allow" ;
+VAL_TABLE_ DV_RelayCtrl_state 1 "closed" 0 "open" ;
+VAL_TABLE_ RelayWeld_state 1 "weld" 0 "Not weld" ;
+VAL_TABLE_ CC2_State 1 "Connecte" 0 "Not  Connecte" ;
+VAL_TABLE_ Relay_state 1 "closed" 0 "open" ;
+
+
+BO_ 1816 BMS_WakeUpSourseState: 8 BMU
+ SG_ DV_CAN_WakeUpSource : 7|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ DV_CAN_RTCWakeUpSts : 13|2@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ DV_CAN_OBCWakeUpSts : 11|2@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ DV_CAN_KL30SupVolt : 39|8@0+ (0.1,0) [0|0] "V" Vector__XXX
+ SG_ DV_CAN_KeyOnWakeSts : 9|2@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ DV_CAN_EVCCWakeUpSts : 17|2@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ DV_CAN_CVSSupVolt : 47|8@0+ (0.1,0) [0|0] "V" Vector__XXX
+ SG_ DV_CAN_CPSRWakeUpSts : 19|2@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ DV_CAN_CPSRSupVolt : 31|8@0+ (0.1,0) [0|0] "V" Vector__XXX
+ SG_ DV_CAN_CANWakeUpSts : 15|2@0+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 1807 BMS_HVBoard_Current: 4 BMU
+ SG_ INHW_Ve_BattPackVolt : 23|11@0+ (0.25,0) [0|511] "Volt" Vector__XXX
+ SG_ INHW_Ve_BattCurr : 7|15@0+ (0.1,0) [0|3276.7] "A" Vector__XXX
+
+BO_ 1794 BMS_BatteryState2: 8 BMU
+ SG_ INHW_Ve_CoolantTemp_Out : 55|13@0- (0.1,0) [-256|255.9] "degC" Vector__XXX
+ SG_ INHW_Ve_CoolantTemp_In : 39|13@0- (0.1,0) [-256|255.9] "degC" Vector__XXX
+ SG_ INHW_Ve_IsoRes : 7|32@0+ (0.001,0) [0|1000000] "KOhm" Vector__XXX
+
+BO_ 1806 BMS_WorkModeState: 8 BMU
+ SG_ mRLY_AcChgRlyCtrlMod_U08 : 60|5@0+ (1,0) [0|31] "bit" Vector__XXX
+ SG_ mCHG_DcChgReqMod_U08 : 14|2@0+ (1,0) [0|3] "bit" Vector__XXX
+ SG_ mWMD_SysMod_U08 : 7|8@0+ (1,0) [0|255] "bit" Vector__XXX
+ SG_ mWMD_DrvModSts_U08 : 12|5@0+ (1,0) [0|31] "bit" Vector__XXX
+ SG_ mTHM_ModSts_U08 : 52|5@0+ (1,0) [0|31] "bit" Vector__XXX
+ SG_ mRLY_DrvRlyCtrlMod_U08 : 44|5@0+ (1,0) [0|31] "bit" Vector__XXX
+ SG_ mRLY_DcChgRlyCtrlMod_U08 : 36|5@0+ (1,0) [0|31] "bit" Vector__XXX
+ SG_ mCHG_DcChgModSts_U08 : 28|5@0+ (1,0) [0|31] "bit" Vector__XXX
+ SG_ mCHG_AcChgModSts_U08 : 19|4@0+ (1,0) [0|15] "bit" Vector__XXX
+
+BO_ 1793 BMS_BatteryState1: 8 BMU
+ SG_ INHW_Ve_AvgTemp : 52|13@0- (0.1,0) [-256|255.9] "degC" Vector__XXX
+ SG_ INHW_Ve_HvBattSoc : 47|11@0+ (0.05,0) [0|100] "%" Vector__XXX
+ SG_ TotalNum_TempSensor : 39|8@0+ (1,0) [0|255] "bit" Vector__XXX
+ SG_ TotalNum_Cell : 31|8@0+ (1,0) [0|255] "bit" Vector__XXX
+ SG_ CC_Ve_FCH_PosRelayState : 12|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ CC_Ve_FCH_PrechgRelayState : 13|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ CC_Ve_PrechgRelayState : 8|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ CC_Ve_PosRelayState : 23|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ CC_Ve_OBC_PrechgRelayState : 11|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ CC_Ve_OBC_PosRelayState : 10|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ CC_Ve_OBC_NegRelayState : 9|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ CC_Ve_NegRelayState : 22|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ CC_Ve_Lin_State : 3|4@0+ (1,0) [0|15] "bit" Vector__XXX
+ SG_ CC_Ve_HVIL_State2 : 4|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ CC_Ve_HVIL_State1 : 5|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ CC_Ve_CrashState : 14|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ CC_Ve_CC2State : 15|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ CC_IsoRes_state : 7|2@0+ (1,0) [0|3] "bit" Vector__XXX
+
+BO_ 1795 BMS_HVBoard_Voltage: 8 BMU
+ SG_ INHW_Ve_FuseVolt : 50|11@0+ (0.25,0) [0|511] "Volt" Vector__XXX
+ SG_ INHW_Ve_ChargBusVolt : 47|11@0+ (0.25,0) [0|511] "Volt" Vector__XXX
+ SG_ INHW_Ve_DchLinkVolt : 31|11@0+ (0.25,0) [0|511] "Volt" Vector__XXX
+ SG_ INHW_Ve_CellVSumTotVolt : 7|11@0+ (0.25,0) [0|511] "Volt" Vector__XXX
+ SG_ INHW_Ve_DchBusVolt : 10|11@0+ (0.25,0) [0|511] "Volt" Vector__XXX
+
+BO_ 1801 BMS_ModuleVolt7: 8 BMU
+ SG_ DV_Ve_Module14 m4 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_Module13 m4 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_Module12 m3 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_Module11 m3 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_Module10 m3 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_Module9 m2 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_Module8 m2 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_Module7 m2 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_Module6 m1 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_Module5 m1 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_Module4 m1 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_Module3 m0 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_Module2 m0 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_Module1 m0 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ ModuleNumIndex M : 7|8@0+ (1,0) [0|255] "bit" Vector__XXX
+
+BO_ 1803 BMS_FID: 8 BMU
+ SG_ FID_CELL_VOLTAGE_UNAVAIL : 5|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ INDICATION_SERVICE_REQUIRED : 21|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_VALVE_STUCK_UNCONFIRMED : 23|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_VALVE_STUCK : 22|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_STOP_SAFELY : 18|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_MPM_CUR_DATA : 48|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_MOD8_TEMP_SEN_UNCONF : 41|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_MOD7_TEMP_SEN_UNCONF : 40|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_MOD6_TEMP_SEN_UNCONF : 39|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_MOD5_TEMP_SEN_UNCONF : 38|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_MOD4_TEMP_SEN_UNCONF : 37|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_MOD3_TEMP_SEN_UNCONF : 36|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_MOD2_TEMP_SEN_UNCONF : 35|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_MOD1_TEMP_SEN_UNCONF : 34|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_LOST_CUR_SENS : 45|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_ECM_SIGNAL_FAILURE : 32|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_CUR_SENS_UNAVAIL : 6|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_CUR_SENS_INTERNAL : 44|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_COOL_TEMP_UNSTABLE : 28|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_COOL_TEMP_FAILURE : 31|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_COOL_PERF_UNCONFIRMED : 46|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_BCM_SIGNAL_FAILURE : 49|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_COOLTEMP_RAT_UNCONF : 24|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_MPM_CVTN_DATA : 47|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_NO_DISCHARGE_ALLOWED : 19|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_UDC_MODE : 8|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_SYSTEM_ISOLATION_TEST : 10|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_POS_STUCKED_CLOSED_TEST : 12|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_NO_RESTART_MESSAGE : 20|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_NO_CONNECTION : 17|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_NO_CIDD : 7|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_NO_CHARGING : 14|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_NO_BALANCING : 9|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_NEG_STUCKED_CLOSED_TEST : 13|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_INSTANT_DISCONNECTION : 0|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_INHIBIT_SELFTEST : 43|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_INHIBIT_PASSIVE_COOLING : 16|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_INHIBIT_CHILLER_COOLING : 15|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_HVIL_OPEN_EM : 33|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_HV_SOONUNAVAIL : 4|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_DO_NOT_CONNECT : 1|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_DISCHARGE_POWERLIMIT : 2|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_CVTN_UNSTABLE : 25|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_CRASH_EVENT : 11|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_COOL_FLOW_UNSTABLE : 30|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_CHARGE_POWERLIMIT : 3|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_CELL_VOLT_UNSTABLE : 26|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_CELL_CRITHIGHVOLT_DET : 42|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_BATT_TEMP_UNSTABLE : 27|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FID_BATT_CURR_UNSTABLE : 29|1@0+ (1,0) [0|1] "bit" Vector__XXX
+
+BO_ 1798 BMS_CellTempReport: 8 BMU
+ SG_ DV_Ve_CellTemp28 m9 : 15|13@0- (0.1,-50) [-459.6|359.5] "degC" Vector__XXX
+ SG_ DV_Ve_CellTemp27 m8 : 47|13@0- (0.1,-50) [-459.6|359.5] "degC" Vector__XXX
+ SG_ DV_Ve_CellTemp26 m8 : 31|13@0- (0.1,-50) [-459.6|359.5] "degC" Vector__XXX
+ SG_ DV_Ve_CellTemp25 m8 : 15|13@0- (0.1,-50) [-459.6|359.5] "degC" Vector__XXX
+ SG_ DV_Ve_CellTemp24 m7 : 47|13@0- (0.1,-50) [-459.6|359.5] "degC" Vector__XXX
+ SG_ DV_Ve_CellTemp23 m7 : 31|13@0- (0.1,-50) [-459.6|359.5] "degC" Vector__XXX
+ SG_ DV_Ve_CellTemp22 m7 : 15|13@0- (0.1,-50) [-459.6|359.5] "degC" Vector__XXX
+ SG_ DV_Ve_CellTemp21 m6 : 47|13@0- (0.1,-50) [-459.6|359.5] "degC" Vector__XXX
+ SG_ DV_Ve_CellTemp20 m6 : 31|13@0- (0.1,-50) [-459.6|359.5] "degC" Vector__XXX
+ SG_ DV_Ve_CellTemp19 m6 : 15|13@0- (0.1,-50) [-459.6|359.5] "degC" Vector__XXX
+ SG_ DV_Ve_CellTemp18 m5 : 47|13@0- (0.1,-50) [-459.6|359.5] "degC" Vector__XXX
+ SG_ DV_Ve_CellTemp17 m5 : 31|13@0- (0.1,-50) [-459.6|359.5] "degC" Vector__XXX
+ SG_ DV_Ve_CellTemp16 m5 : 15|13@0- (0.1,-50) [-459.6|359.5] "degC" Vector__XXX
+ SG_ DV_Ve_CellTemp15 m4 : 47|13@0- (0.1,-50) [-459.6|359.5] "degC" Vector__XXX
+ SG_ DV_Ve_CellTemp14 m4 : 31|13@0- (0.1,-50) [-459.6|359.5] "degC" Vector__XXX
+ SG_ DV_Ve_CellTemp13 m4 : 15|13@0- (0.1,-50) [-459.6|359.5] "degC" Vector__XXX
+ SG_ DV_Ve_CellTemp12 m3 : 47|13@0- (0.1,-50) [-459.6|359.5] "degC" Vector__XXX
+ SG_ DV_Ve_CellTemp11 m3 : 31|13@0- (0.1,-50) [-459.6|359.5] "degC" Vector__XXX
+ SG_ DV_Ve_CellTemp10 m3 : 15|13@0- (0.1,-50) [-459.6|359.5] "degC" Vector__XXX
+ SG_ DV_Ve_CellTemp9 m2 : 47|13@0- (0.1,-50) [-459.6|359.5] "degC" Vector__XXX
+ SG_ DV_Ve_CellTemp8 m2 : 31|13@0- (0.1,-50) [-459.6|359.5] "degC" Vector__XXX
+ SG_ DV_Ve_CellTemp7 m2 : 15|13@0- (0.1,-50) [-459.6|359.5] "degC" Vector__XXX
+ SG_ DV_Ve_CellTemp6 m1 : 47|13@0- (0.1,-50) [-459.6|359.5] "degC" Vector__XXX
+ SG_ DV_Ve_CellTemp5 m1 : 31|13@0- (0.1,-50) [-459.6|359.5] "degC" Vector__XXX
+ SG_ DV_Ve_CellTemp4 m1 : 15|13@0- (0.1,-50) [-459.6|359.5] "degC" Vector__XXX
+ SG_ DV_Ve_CellTemp3 m0 : 47|13@0- (0.1,-50) [-459.6|359.5] "degC" Vector__XXX
+ SG_ DV_Ve_CellTemp2 m0 : 31|13@0- (0.1,-50) [-459.6|359.5] "degC" Vector__XXX
+ SG_ TempNumIndex M : 7|8@0+ (1,0) [0|255] "bit" Vector__XXX
+ SG_ DV_Ve_CellTemp1 m0 : 15|13@0- (0.1,-50) [-459.6|359.5] "degC" Vector__XXX
+
+BO_ 1800 BMS_CellVoltReport: 8 BMU
+ SG_ DV_Ve_CellVolt112 m37 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt111 m36 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt110 m36 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt109 m36 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt108 m35 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt107 m35 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt106 m35 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt105 m34 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt104 m34 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt103 m34 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt102 m33 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt101 m33 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt100 m33 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt99 m32 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt98 m32 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt97 m32 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt96 m31 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt95 m31 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt94 m31 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt93 m30 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt92 m30 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt91 m30 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt90 m29 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt89 m29 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt88 m29 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt87 m28 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt86 m28 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt85 m28 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt84 m27 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt83 m27 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt82 m27 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt81 m26 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt80 m26 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt79 m26 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt78 m25 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt77 m25 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt76 m25 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt75 m24 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt74 m24 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt73 m24 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt72 m23 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt71 m23 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt70 m23 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt69 m22 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt68 m22 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt67 m22 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt66 m21 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt65 m21 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt64 m21 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt63 m20 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt62 m20 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt61 m20 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt60 m19 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt59 m19 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt58 m19 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt57 m18 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt56 m18 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt55 m18 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt54 m17 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt53 m17 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt52 m17 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt51 m16 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt50 m16 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt49 m16 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt48 m15 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt47 m15 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt46 m15 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt45 m14 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt44 m14 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt43 m14 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt42 m13 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt41 m13 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt40 m13 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt39 m12 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt38 m12 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt37 m12 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt36 m11 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt35 m11 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt34 m11 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt33 m10 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt32 m10 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt31 m10 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt30 m9 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt29 m9 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt28 m9 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt27 m8 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt26 m8 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt25 m8 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt24 m7 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt23 m7 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt22 m7 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt21 m6 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt20 m6 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt19 m6 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt18 m5 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt17 m5 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt16 m5 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt15 m4 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt14 m4 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt13 m4 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt12 m3 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt11 m3 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt10 m3 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt9 m2 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt8 m2 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt7 m2 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt6 m1 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt5 m1 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt4 m1 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt3 m0 : 47|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt2 m0 : 31|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ DV_Ve_CellVolt1 m0 : 15|16@0+ (0.001,0) [0|65.535] "V" Vector__XXX
+ SG_ CellNumIndex M : 7|8@0+ (1,0) [0|255] "bit" Vector__XXX
+
+BO_ 1824 DV_CAN_RlyCtrl: 8 Vector__XXX
+ SG_ DV_CAN_RlyCtrlAllow : 15|4@0+ (1,0) [0|15] "bit"  BMU
+ SG_ DV_CAN_IsoCtrlAllow : 11|1@0+ (1,0) [0|1] "bit"  BMU
+ SG_ DV_CAN_HvbattSocUB_Allow : 9|1@0+ (1,0) [0|1] "bit"  BMU
+ SG_ DV_CAN_HvbattSoc : 23|11@0+ (0.05,0) [0|100] ""  BMU
+ SG_ DV_CAN_OBC_PrechgRly : 4|1@0+ (1,0) [0|1] "bit"  BMU
+ SG_ DV_CAN_OBC_PosRly : 5|1@0+ (1,0) [0|1] "bit"  BMU
+ SG_ DV_CAN_OBC_NegRly : 3|1@0+ (1,0) [0|1] "bit"  BMU
+ SG_ DV_CAN_FCH_PrechgRly : 6|1@0+ (1,0) [0|1] "bit"  BMU
+ SG_ DV_CAN_FCH_PosRly : 7|1@0+ (1,0) [0|1] "bit"  BMU
+ SG_ DV_CAN_IsoResCtrl : 10|1@0+ (1,0) [0|1] "bit"  BMU
+ SG_ DV_CAN_PrechgRly : 1|1@0+ (1,0) [0|1] "bit"  BMU
+ SG_ DV_CAN_PosRly : 2|1@0+ (1,0) [0|1] "bit"  BMU
+ SG_ DV_CAN_NegRly : 0|1@0+ (1,0) [0|1] "bit"  BMU
+
+BO_ 1802 BMS_FaultEventAll1: 8 BMU
+ SG_ FaultNm39 m0 : 40|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm225 m4 : 14|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm224 m4 : 15|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm223 m3 : 56|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm222 m3 : 57|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm221 m3 : 58|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm220 m3 : 59|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm219 m3 : 60|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm218 m3 : 61|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm217 m3 : 62|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm216 m3 : 63|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm215 m3 : 48|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm214 m3 : 49|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm213 m3 : 50|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm212 m3 : 51|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm211 m3 : 52|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm210 m3 : 53|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm209 m3 : 54|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm208 m3 : 55|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm207 m3 : 40|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm206 m3 : 41|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm205 m3 : 42|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm204 m3 : 43|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm203 m3 : 44|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm202 m3 : 45|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm201 m3 : 46|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm200 m3 : 47|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm199 m3 : 32|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm198 m3 : 33|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm197 m3 : 34|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm196 m3 : 35|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm195 m3 : 36|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm194 m3 : 37|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm193 m3 : 38|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm192 m3 : 39|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm191 m3 : 24|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm190 m3 : 25|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm189 m3 : 26|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm188 m3 : 27|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm187 m3 : 28|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm186 m3 : 29|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm185 m3 : 30|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm184 m3 : 31|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm183 m3 : 16|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm182 m3 : 17|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm181 m3 : 18|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm180 m3 : 19|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm179 m3 : 20|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm178 m3 : 21|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm177 m3 : 22|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm176 m3 : 23|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm175 m3 : 8|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm174 m3 : 9|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm173 m3 : 10|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm172 m3 : 11|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm171 m3 : 12|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm170 m3 : 13|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm169 m3 : 14|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm168 m3 : 15|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm167 m2 : 56|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm166 m2 : 57|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm165 m2 : 58|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm164 m2 : 59|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm163 m2 : 60|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm162 m2 : 61|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm161 m2 : 62|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm160 m2 : 63|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm159 m2 : 48|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm158 m2 : 49|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm157 m2 : 50|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm156 m2 : 51|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm155 m2 : 52|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm154 m2 : 53|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm153 m2 : 54|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm152 m2 : 55|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm151 m2 : 40|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm150 m2 : 41|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm149 m2 : 42|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm148 m2 : 43|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm147 m2 : 44|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm146 m2 : 45|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm145 m2 : 46|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm144 m2 : 47|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm143 m2 : 32|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm142 m2 : 33|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm141 m2 : 34|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm140 m2 : 35|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm139 m2 : 36|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm138 m2 : 37|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm137 m2 : 38|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm136 m2 : 39|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm135 m2 : 24|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm134 m2 : 25|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm133 m2 : 26|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm132 m2 : 27|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm131 m2 : 28|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm130 m2 : 29|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm129 m2 : 30|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm128 m2 : 31|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm127 m2 : 16|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm126 m2 : 17|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm125 m2 : 18|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm124 m2 : 19|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm123 m2 : 20|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm122 m2 : 21|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm121 m2 : 22|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm120 m2 : 23|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm119 m2 : 8|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm118 m2 : 9|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm117 m2 : 10|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm116 m2 : 11|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm115 m2 : 12|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm114 m2 : 13|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm113 m2 : 14|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm112 m2 : 15|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm111 m1 : 56|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm110 m1 : 57|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm109 m1 : 58|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm108 m1 : 59|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm107 m1 : 60|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm106 m1 : 61|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm105 m1 : 62|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm104 m1 : 63|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm103 m1 : 48|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm102 m1 : 49|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm101 m1 : 50|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm100 m1 : 51|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm99 m1 : 52|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm98 m1 : 53|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm97 m1 : 54|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm96 m1 : 55|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm95 m1 : 40|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm94 m1 : 41|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm93 m1 : 42|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm92 m1 : 43|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm91 m1 : 44|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm90 m1 : 45|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm89 m1 : 46|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm88 m1 : 47|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm87 m1 : 32|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm86 m1 : 33|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm85 m1 : 34|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm84 m1 : 35|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm83 m1 : 36|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm82 m1 : 37|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm81 m1 : 38|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm80 m1 : 39|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm79 m1 : 24|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm78 m1 : 25|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm77 m1 : 26|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm76 m1 : 27|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm75 m1 : 28|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm74 m1 : 29|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm73 m1 : 30|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm72 m1 : 31|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm71 m1 : 16|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm70 m1 : 17|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm69 m1 : 18|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm68 m1 : 19|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm67 m1 : 20|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm66 m1 : 21|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm65 m1 : 22|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm64 m1 : 23|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm63 m1 : 8|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm62 m1 : 9|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm61 m1 : 10|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm60 m1 : 11|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm59 m1 : 12|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm58 m1 : 13|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm57 m1 : 14|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm56 m1 : 15|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm55 m0 : 56|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm54 m0 : 57|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm53 m0 : 58|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm52 m0 : 59|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm51 m0 : 60|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm50 m0 : 61|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm49 m0 : 62|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm48 m0 : 63|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm47 m0 : 48|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm46 m0 : 49|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm45 m0 : 50|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm44 m0 : 51|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm43 m0 : 52|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm42 m0 : 53|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm41 m0 : 54|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm40 m0 : 55|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm38 m0 : 41|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm37 m0 : 42|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm36 m0 : 43|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm35 m0 : 44|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm34 m0 : 45|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm33 m0 : 46|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm32 m0 : 47|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm31 m0 : 32|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm30 m0 : 33|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm29 m0 : 34|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm28 m0 : 35|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm27 m0 : 36|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm26 m0 : 37|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm25 m0 : 38|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm24 m0 : 39|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm23 m0 : 24|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm22 m0 : 25|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm21 m0 : 26|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm20 m0 : 27|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm19 m0 : 28|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm18 m0 : 29|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm17 m0 : 30|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm16 m0 : 31|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm15 m0 : 16|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm14 m0 : 17|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm13 m0 : 18|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm12 m0 : 19|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm11 m0 : 20|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm10 m0 : 21|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm9 m0 : 22|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm8 m0 : 23|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm7 m0 : 8|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm6 m0 : 9|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm5 m0 : 10|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm4 m0 : 11|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm3 m0 : 12|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm2 m0 : 13|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm1 m0 : 14|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNm0 m0 : 15|1@0+ (1,0) [0|1] "bit" Vector__XXX
+ SG_ FaultNumIndex M : 7|8@0+ (1,0) [0|255] "bit" Vector__XXX
+
+BO_ 1804 BMS_SWVersion: 8 BMU
+ SG_ ST_Ve_HWVersion : 39|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ ST_Ve_SWVersion : 7|32@0+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 1797 BMS_CellTempExtremum: 8 BMU
+ SG_ INHW_Ve_TempDiffMax : 55|13@0+ (0.1,0) [0|255] "degC" Vector__XXX
+ SG_ INHW_Ve_CellMinTempNo : 47|8@0+ (1,0) [0|255] "bit" Vector__XXX
+ SG_ INHW_Ve_CellMinTemp : 31|13@0- (0.1,0) [-256|255.9] "degC" Vector__XXX
+ SG_ INHW_Ve_CellMaxTempNo : 23|8@0+ (1,0) [0|255] "" Vector__XXX
+ SG_ INHW_Ve_CellMaxTemp : 7|13@0- (0.1,0) [-256|255.9] "degC" Vector__XXX
+
+BO_ 1799 BMS_CellVoltExtremum: 8 BMU
+ SG_ INHW_Ve_VoltDiffMax : 55|16@0+ (1,0) [0|5000] "mV" Vector__XXX
+ SG_ INHW_Ve_CellMaxVolt : 7|16@0+ (1,0) [0|5000] "mv" Vector__XXX
+ SG_ INHW_Ve_CellMinVolt : 31|16@0+ (1,0) [0|5000] "mv" Vector__XXX
+ SG_ INHW_Ve_CellMinVoltNo : 47|8@0+ (1,0) [0|255] "bit" Vector__XXX
+ SG_ INHW_Ve_CellMaxVoltNo : 23|8@0+ (1,0) [0|255] "bit" Vector__XXX
+
+
+
+CM_ "GEEA2.0_BMSH_DebugV3   updata  to V4   20180523
+1﹜add  cell  72->112
+2﹜add  Temp  10->28
+3﹜change cell start number 0~71    to  1~72--->1~112
+4﹜change Temp start number 0~11    to  1~12--->1~28
+5﹜add relay state for Dccharging
+
+";
+CM_ SG_ 1807 INHW_Ve_BattCurr "indicating the actual working mode of BMSH.";
+CM_ SG_ 1794 INHW_Ve_CoolantTemp_Out "battery type code";
+CM_ SG_ 1794 INHW_Ve_CoolantTemp_In "battery type code";
+CM_ SG_ 1794 INHW_Ve_IsoRes "BMSH measured Insulation Resistance";
+CM_ SG_ 1806 mRLY_AcChgRlyCtrlMod_U08 "DC charge relay control mode status";
+CM_ SG_ 1806 mCHG_DcChgReqMod_U08 "drive relay control mode status";
+CM_ SG_ 1806 mWMD_SysMod_U08 "BECM work mode status ";
+CM_ SG_ 1806 mWMD_DrvModSts_U08 "drive mode status";
+CM_ SG_ 1806 mTHM_ModSts_U08 "THM  working status";
+CM_ SG_ 1806 mRLY_DrvRlyCtrlMod_U08 "drive relay control mode status";
+CM_ SG_ 1806 mRLY_DcChgRlyCtrlMod_U08 "DC charge relay control mode status";
+CM_ SG_ 1806 mCHG_DcChgModSts_U08 "DC charge status";
+CM_ SG_ 1806 mCHG_AcChgModSts_U08 "AC charge status";
+CM_ SG_ 1793 CC_Ve_HVIL_State2 "Vehicle HVILFault status";
+CM_ SG_ 1793 CC_Ve_HVIL_State1 "Battery HVILFault status";
+CM_ SG_ 1793 CC_Ve_CrashState "Crash Event";
+CM_ SG_ 1793 CC_IsoRes_state "Battery isolation state";
+CM_ SG_ 1797 INHW_Ve_TempDiffMax "Battery Under Voltage";
+CM_ SG_ 1797 INHW_Ve_CellMinTemp "Battery Uniformity";
+CM_ SG_ 1797 INHW_Ve_CellMaxTemp "battery type code";
+CM_ BO_ 1799 "Transmitted by BMSH, including all cell information";
+CM_ SG_ 1799 INHW_Ve_VoltDiffMax "The maximum cell voltage value in BMSH pack
+0x1389~0xFFFF: Invalid";
+CM_ SG_ 1799 INHW_Ve_CellMaxVolt "The maximum cell voltage value in BMSH pack
+0x1389~0xFFFF: Invalid";
+CM_ SG_ 1799 INHW_Ve_CellMinVolt "The minimum cell voltage value in BMSH pack
+0x1389~0xFFFF: Invalid";
+CM_ SG_ 1799 INHW_Ve_CellMinVoltNo "The number of Cell that has the minimun voltage in BMSH pack(from1)
+0xC9~0xFF: Invalid";
+CM_ SG_ 1799 INHW_Ve_CellMaxVoltNo "The Number of battery module that has the Max Cell Temp
+";
+BA_DEF_ BO_  "DiagState" ENUM  "No","Yes";
+BA_DEF_ BO_  "DiagRequest" ENUM  "No","Yes";
+BA_DEF_ BO_  "DiagResponse" ENUM  "No","Yes";
+BA_DEF_ BO_  "GenMsgCycleTime" INT 0 0;
+BA_DEF_ SG_  "GenSigStartValue" INT 0 0;
+BA_DEF_ SG_  "GenSigInactiveValue" INT 0 0;
+BA_DEF_ BO_  "GenMsgCycleTimeFast" INT 0 0;
+BA_DEF_ BO_  "GenMsgNrOfRepetition" INT 0 0;
+BA_DEF_ BO_  "GenMsgDelayTime" INT 0 0;
+BA_DEF_  "DBName" STRING ;
+BA_DEF_ BU_  "NodeLayerModules" STRING ;
+BA_DEF_ SG_  "GenSigTimeoutValue" INT 0 1000000000;
+BA_DEF_ BO_  "GenMsgCycleTimeActive" INT 0 0;
+BA_DEF_ BU_  "ILUsed" ENUM  "No","Yes";
+BA_DEF_ BU_  "DiagStationAddress" HEX 0 255;
+BA_DEF_ BU_  "NmStationAddress" HEX 0 65535;
+BA_DEF_ BU_  "NmCAN" INT 0 2;
+BA_DEF_  "Manufacturer" STRING ;
+BA_DEF_  "NmType" STRING ;
+BA_DEF_  "NmBaseAddress" HEX 0 2047;
+BA_DEF_  "NmMessageCount" INT 0 255;
+BA_DEF_ BO_  "GenMsgILSupport" ENUM  "No","Yes";
+BA_DEF_ BO_  "GenMsgStartDelayTime" INT 0 65535;
+BA_DEF_  "BusType" STRING ;
+BA_DEF_DEF_  "DiagState" "No";
+BA_DEF_DEF_  "DiagRequest" "No";
+BA_DEF_DEF_  "DiagResponse" "No";
+BA_DEF_DEF_  "GenMsgCycleTime" 0;
+BA_DEF_DEF_  "GenSigStartValue" 0;
+BA_DEF_DEF_  "GenSigInactiveValue" 0;
+BA_DEF_DEF_  "GenMsgCycleTimeFast" 0;
+BA_DEF_DEF_  "GenMsgNrOfRepetition" 0;
+BA_DEF_DEF_  "GenMsgDelayTime" 0;
+BA_DEF_DEF_  "DBName" "";
+BA_DEF_DEF_  "NodeLayerModules" "CANoeILNLVector.dll";
+BA_DEF_DEF_  "GenSigTimeoutValue" 0;
+BA_DEF_DEF_  "GenMsgCycleTimeActive" 0;
+BA_DEF_DEF_  "ILUsed" "Yes";
+BA_DEF_DEF_  "DiagStationAddress" 0;
+BA_DEF_DEF_  "NmStationAddress" 0;
+BA_DEF_DEF_  "NmCAN" 0;
+BA_DEF_DEF_  "Manufacturer" "";
+BA_DEF_DEF_  "NmType" "";
+BA_DEF_DEF_  "NmBaseAddress" 1024;
+BA_DEF_DEF_  "NmMessageCount" 128;
+BA_DEF_DEF_  "GenMsgILSupport" "Yes";
+BA_DEF_DEF_  "GenMsgStartDelayTime" 0;
+BA_DEF_DEF_  "BusType" "CAN";
+BA_ "BusType" "CAN";
+BA_ "DBName" "GEEA20_BMSH_DebugV4";
+BA_ "GenMsgCycleTime" BO_ 1807 20;
+BA_ "GenMsgCycleTime" BO_ 1794 500;
+BA_ "GenMsgCycleTime" BO_ 1806 10;
+BA_ "GenMsgCycleTime" BO_ 1793 500;
+BA_ "GenMsgCycleTime" BO_ 1795 20;
+BA_ "GenMsgCycleTime" BO_ 1801 100;
+BA_ "GenMsgCycleTime" BO_ 1803 100;
+BA_ "GenMsgCycleTime" BO_ 1798 100;
+BA_ "GenMsgCycleTime" BO_ 1800 20;
+BA_ "GenMsgCycleTime" BO_ 1824 500;
+BA_ "GenMsgCycleTime" BO_ 1802 100;
+BA_ "GenMsgCycleTime" BO_ 1804 1000;
+BA_ "GenMsgCycleTime" BO_ 1797 500;
+BA_ "GenMsgCycleTime" BO_ 1799 100;
+BA_ "GenSigStartValue" SG_ 1807 INHW_Ve_BattCurr 0;
+BA_ "GenSigStartValue" SG_ 1794 INHW_Ve_CoolantTemp_Out 200;
+BA_ "GenSigStartValue" SG_ 1794 INHW_Ve_CoolantTemp_In 200;
+BA_ "GenSigStartValue" SG_ 1794 INHW_Ve_IsoRes 1000000;
+BA_ "GenSigStartValue" SG_ 1793 INHW_Ve_AvgTemp 200;
+BA_ "GenSigStartValue" SG_ 1793 CC_Ve_HVIL_State2 0;
+BA_ "GenSigStartValue" SG_ 1793 CC_Ve_HVIL_State1 0;
+BA_ "GenSigStartValue" SG_ 1798 DV_Ve_CellTemp28 700;
+BA_ "GenSigStartValue" SG_ 1798 DV_Ve_CellTemp27 700;
+BA_ "GenSigStartValue" SG_ 1798 DV_Ve_CellTemp26 700;
+BA_ "GenSigStartValue" SG_ 1798 DV_Ve_CellTemp25 700;
+BA_ "GenSigStartValue" SG_ 1798 DV_Ve_CellTemp24 700;
+BA_ "GenSigStartValue" SG_ 1798 DV_Ve_CellTemp23 700;
+BA_ "GenSigStartValue" SG_ 1798 DV_Ve_CellTemp22 700;
+BA_ "GenSigStartValue" SG_ 1798 DV_Ve_CellTemp21 700;
+BA_ "GenSigStartValue" SG_ 1798 DV_Ve_CellTemp20 700;
+BA_ "GenSigStartValue" SG_ 1798 DV_Ve_CellTemp19 700;
+BA_ "GenSigStartValue" SG_ 1798 DV_Ve_CellTemp18 700;
+BA_ "GenSigStartValue" SG_ 1798 DV_Ve_CellTemp17 700;
+BA_ "GenSigStartValue" SG_ 1798 DV_Ve_CellTemp16 700;
+BA_ "GenSigStartValue" SG_ 1798 DV_Ve_CellTemp15 700;
+BA_ "GenSigStartValue" SG_ 1798 DV_Ve_CellTemp14 700;
+BA_ "GenSigStartValue" SG_ 1798 DV_Ve_CellTemp13 700;
+BA_ "GenSigStartValue" SG_ 1798 DV_Ve_CellTemp12 700;
+BA_ "GenSigStartValue" SG_ 1798 DV_Ve_CellTemp11 700;
+BA_ "GenSigStartValue" SG_ 1798 DV_Ve_CellTemp10 700;
+BA_ "GenSigStartValue" SG_ 1798 DV_Ve_CellTemp9 700;
+BA_ "GenSigStartValue" SG_ 1798 DV_Ve_CellTemp8 700;
+BA_ "GenSigStartValue" SG_ 1798 DV_Ve_CellTemp7 700;
+BA_ "GenSigStartValue" SG_ 1798 DV_Ve_CellTemp6 700;
+BA_ "GenSigStartValue" SG_ 1798 DV_Ve_CellTemp5 700;
+BA_ "GenSigStartValue" SG_ 1798 DV_Ve_CellTemp4 700;
+BA_ "GenSigStartValue" SG_ 1798 DV_Ve_CellTemp3 700;
+BA_ "GenSigStartValue" SG_ 1798 DV_Ve_CellTemp2 700;
+BA_ "GenSigStartValue" SG_ 1798 DV_Ve_CellTemp1 700;
+BA_ "GenSigStartValue" SG_ 1797 INHW_Ve_TempDiffMax 0;
+BA_ "GenSigStartValue" SG_ 1797 INHW_Ve_CellMinTempNo 0;
+BA_ "GenSigStartValue" SG_ 1797 INHW_Ve_CellMinTemp 200;
+BA_ "GenSigStartValue" SG_ 1797 INHW_Ve_CellMaxTemp 200;
+BA_ "GenSigStartValue" SG_ 1799 INHW_Ve_VoltDiffMax 0;
+BA_ "GenSigStartValue" SG_ 1799 INHW_Ve_CellMaxVolt 0;
+BA_ "GenSigStartValue" SG_ 1799 INHW_Ve_CellMinVolt 0;
+VAL_ 1793 CC_Ve_FCH_PosRelayState 1 "ON" 0 "OFF" ;
+VAL_ 1793 CC_Ve_FCH_PrechgRelayState 1 "ON" 0 "OFF" ;
+VAL_ 1793 CC_Ve_PrechgRelayState 1 "ON" 0 "OFF" ;
+VAL_ 1793 CC_Ve_PosRelayState 1 "ON" 0 "OFF" ;
+VAL_ 1793 CC_Ve_OBC_PrechgRelayState 1 "ON" 0 "OFF" ;
+VAL_ 1793 CC_Ve_OBC_PosRelayState 1 "ON" 0 "OFF" ;
+VAL_ 1793 CC_Ve_OBC_NegRelayState 1 "ON" 0 "OFF" ;
+VAL_ 1793 CC_Ve_NegRelayState 1 "ON" 0 "OFF" ;
+VAL_ 1793 CC_Ve_Lin_State 1 "communication" 0 "Not  communication" ;
+VAL_ 1793 CC_Ve_HVIL_State2 1 "Not Connected" 0 "Connected" ;
+VAL_ 1793 CC_Ve_HVIL_State1 1 "Not Connected" 0 "Connected" ;
+VAL_ 1793 CC_Ve_CrashState 1 "Crash Happen" 0 "OK,NO Crash" ;
+VAL_ 1793 CC_Ve_CC2State 1 "Connecte" 0 "Not  Connecte" ;
+VAL_ 1793 CC_IsoRes_state 3 "Reserve" 2 "Lv2,  R<100次/V" 1 "Lv1, 100次/V <R <500次/V" 0 "OK,   >500次/V" ;
+VAL_ 1803 FID_CELL_VOLTAGE_UNAVAIL 1 "Fault" 0 "Normal" ;
+VAL_ 1803 FID_VALVE_STUCK_UNCONFIRMED 1 "Fault" 0 "Normal" ;
+VAL_ 1803 FID_VALVE_STUCK 1 "Fault" 0 "Normal" ;
+VAL_ 1803 FID_STOP_SAFELY 1 "Fault" 0 "Normal" ;
+VAL_ 1803 FID_MOD8_TEMP_SEN_UNCONF 1 "Fault" 0 "Normal" ;
+VAL_ 1803 FID_MOD7_TEMP_SEN_UNCONF 1 "Fault" 0 "Normal" ;
+VAL_ 1803 FID_MOD6_TEMP_SEN_UNCONF 1 "Fault" 0 "Normal" ;
+VAL_ 1803 FID_MOD5_TEMP_SEN_UNCONF 1 "Fault" 0 "Normal" ;
+VAL_ 1803 FID_MOD4_TEMP_SEN_UNCONF 1 "Fault" 0 "Normal" ;
+VAL_ 1803 FID_MOD3_TEMP_SEN_UNCONF 1 "Fault" 0 "Normal" ;
+VAL_ 1803 FID_MOD2_TEMP_SEN_UNCONF 1 "Fault" 0 "Normal" ;
+VAL_ 1803 FID_MOD1_TEMP_SEN_UNCONF 1 "Fault" 0 "Normal" ;
+VAL_ 1803 FID_LOST_CUR_SENS 1 "Fault" 0 "Normal" ;
+VAL_ 1803 FID_ECM_SIGNAL_FAILURE 1 "Fault" 0 "Normal" ;
+VAL_ 1803 FID_CUR_SENS_UNAVAIL 1 "Fault" 0 "Normal" ;
+VAL_ 1803 FID_CUR_SENS_INTERNAL 1 "Fault" 0 "Normal" ;
+VAL_ 1803 FID_COOL_TEMP_UNSTABLE 1 "Fault" 0 "Normal" ;
+VAL_ 1803 FID_COOL_TEMP_FAILURE 1 "Fault" 0 "Normal" ;
+VAL_ 1803 FID_COOL_PERF_UNCONFIRMED 1 "Fault" 0 "Normal" ;
+VAL_ 1803 FID_BCM_SIGNAL_FAILURE 1 "Fault" 0 "Normal" ;
+VAL_ 1803 FID_COOLTEMP_RAT_UNCONF 1 "Fault" 0 "Normal" ;
+VAL_ 1803 FID_MPM_CVTN_DATA 1 "fault" 0 "normal" ;
+VAL_ 1803 FID_NO_DISCHARGE_ALLOWED 1 "fault" 0 "normal" ;
+VAL_ 1803 FID_UDC_MODE 1 "fault" 0 "normal" ;
+VAL_ 1803 FID_SYSTEM_ISOLATION_TEST 1 "fault" 0 "normal" ;
+VAL_ 1803 FID_POS_STUCKED_CLOSED_TEST 1 "fault" 0 "normal" ;
+VAL_ 1803 FID_NO_RESTART_MESSAGE 1 "fault" 0 "normal" ;
+VAL_ 1803 FID_NO_CONNECTION 1 "fault" 0 "normal" ;
+VAL_ 1803 FID_NO_CIDD 1 "fault" 0 "normal" ;
+VAL_ 1803 FID_NO_CHARGING 1 "fault" 0 "normal" ;
+VAL_ 1803 FID_NO_BALANCING 1 "fault" 0 "normal" ;
+VAL_ 1803 FID_NEG_STUCKED_CLOSED_TEST 1 "fault" 0 "normal" ;
+VAL_ 1803 FID_INSTANT_DISCONNECTION 1 "fault" 0 "normal" ;
+VAL_ 1803 FID_INHIBIT_SELFTEST 1 "fault" 0 "normal" ;
+VAL_ 1803 FID_INHIBIT_PASSIVE_COOLING 1 "fault" 0 "normal" ;
+VAL_ 1803 FID_INHIBIT_CHILLER_COOLING 1 "fault" 0 "normal" ;
+VAL_ 1803 FID_HVIL_OPEN_EM 1 "fault" 0 "normal" ;
+VAL_ 1803 FID_HV_SOONUNAVAIL 1 "fault" 0 "normal" ;
+VAL_ 1803 FID_DO_NOT_CONNECT 1 "fault" 0 "normal" ;
+VAL_ 1803 FID_DISCHARGE_POWERLIMIT 1 "fault" 0 "normal" ;
+VAL_ 1803 FID_CVTN_UNSTABLE 1 "fault" 0 "normal" ;
+VAL_ 1803 FID_CRASH_EVENT 1 "fault" 0 "normal" ;
+VAL_ 1803 FID_COOL_FLOW_UNSTABLE 1 "fault" 0 "normal" ;
+VAL_ 1803 FID_CHARGE_POWERLIMIT 1 "fault" 0 "normal" ;
+VAL_ 1803 FID_CELL_VOLT_UNSTABLE 1 "fault" 0 "normal" ;
+VAL_ 1803 FID_CELL_CRITHIGHVOLT_DET 1 "fault" 0 "normal" ;
+VAL_ 1803 FID_BATT_TEMP_UNSTABLE 1 "fault" 0 "normal" ;
+VAL_ 1803 FID_BATT_CURR_UNSTABLE 1 "fault" 0 "normal" ;
+VAL_ 1824 DV_CAN_RlyCtrlAllow 10 "All Rly can be controled" 9 "Reserved" 8 "DCH_NegRly_CtrlAllow" 7 "DCH_PosRly_CtrlAllow" 6 "DCH_PreRly_CtrlAllow" 5 "FCH_PosRly_CtrlAllow" 4 "FCH_PreRly_CtrlAllow" 3 "OBC_NegRly_CtrlAllow" 2 "OBC_PosRly_CtrlAllow" 1 "OBC_PreRly_CtrlAllow" 0 "Normalㄛnot Allow controled" ;
+VAL_ 1824 DV_CAN_IsoCtrlAllow 1 "allow" 0 "Not allow" ;
+VAL_ 1824 DV_CAN_HvbattSocUB_Allow 1 "Allow" 0 "Not Allow" ;
+VAL_ 1824 DV_CAN_OBC_PrechgRly 1 "closed" 0 "open" ;
+VAL_ 1824 DV_CAN_OBC_PosRly 1 "closed" 0 "open" ;
+VAL_ 1824 DV_CAN_OBC_NegRly 1 "closed" 0 "open" ;
+VAL_ 1824 DV_CAN_FCH_PrechgRly 1 "closed" 0 "open" ;
+VAL_ 1824 DV_CAN_FCH_PosRly 1 "closed" 0 "open" ;
+VAL_ 1824 DV_CAN_IsoResCtrl 1 "open,not ISO Monitor" 0 "closed,ISO Monitor working(init)" ;
+VAL_ 1824 DV_CAN_PrechgRly 1 "closed" 0 "open" ;
+VAL_ 1824 DV_CAN_PosRly 1 "closed" 0 "open" ;
+VAL_ 1824 DV_CAN_NegRly 1 "closed" 0 "open" ;
+VAL_ 1802 FaultNm145 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm144 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm143 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm142 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm141 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm140 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm139 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm138 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm137 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm136 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm135 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm134 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm133 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm132 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm131 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm130 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm129 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm128 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm127 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm126 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm125 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm124 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm123 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm122 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm121 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm120 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm119 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm118 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm117 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm116 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm115 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm114 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm113 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm112 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm111 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm110 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm109 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm108 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm107 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm106 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm105 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm104 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm103 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm102 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm101 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm100 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm14 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm13 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm12 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm11 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm10 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm1 1 "Fault" 0 "Normal" ;
+VAL_ 1802 FaultNm0 1 "Fault" 0 "Normal" ;
+
